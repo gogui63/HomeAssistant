@@ -1,0 +1,54 @@
+google_assistant: 
+  project_id: !secret google_project_id 
+  service_account: !include google_tts.json
+  report_state: true
+  exposed_domains:
+    - sensor
+    - script
+  #   - switch
+  #   - light
+    - climate
+    - cover
+    - camera 
+  #   - media_player
+  #   - scene    
+  #   - group
+  #   - fan
+  expose_by_default: true
+  entity_config:
+    switch.sonoff_cuisine:
+      name: Interrupteur Cuisine
+      room: Cuisine
+      expose: true
+      aliases:
+        - Interrupteur Cuisine
+    sensor.mi_temp_salon:
+      name: Temperature Salon
+      room: Salon
+      expose: true
+      aliases:
+        - Température Salon
+    light.miroir_sdb_gauche:
+      name: Miroir salle de bain gauche
+      expose: true
+      room: Salle de bain
+      aliases:
+        - Miroir salle de bain gauche
+    light.miroir_sdb_droite:
+      room: Salle de bain
+      expose: true
+      name: Miroir salle de bain droite
+      aliases:
+        - Miroir salle de bain droite
+    light.lumiere_indirecte:
+      room: Salon
+      expose: true
+      name: Lumière indirecte
+      aliases:
+        - Lumières indirectes
+    input_boolean.is_jour:
+      room: Salon
+      expose: true
+      name: Mode nuit
+      aliases:
+        - Mode nuit

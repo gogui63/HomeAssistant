@@ -1,0 +1,718 @@
+sensor:
+
+  #===============================================================================#
+  #==== POLLEN ===================================================================#
+  #===============================================================================#  
+
+  - platform: rest
+    name: 'Pollen level'
+    resource: https://www.pollens.fr/risks/thea/counties/06
+    json_attributes:
+      - risks
+    value_template: '{{value_json.riskLevel}}'
+    scan_interval: 21600
+    headers: 
+      User-Agent: Home Assistant
+      Content-Type: application/json
+
+  - platform: rest
+    name: pollen_data
+    scan_interval: 3600
+    resource_template: https://api.ambeedata.com/latest/pollen/by-lat-lng?lat={{ state_attr("zone.home", "latitude") }}&lng={{ state_attr("zone.home", "longitude") }}
+    value_template: >-
+      {{ value_json.message}}
+    headers:
+      content-type: application/json
+      x-api-key: !secret ambee_pollen_api_key
+    json_attributes_path: data[0]
+    json_attributes:
+      - Count
+      - Risk
+      - Species
+      - updatedAt
+      - time
+
+  - platform: template
+    sensors:
+      pollen_arbres:
+        friendly_name: Pollen Arbres
+        icon_template: mdi:tree
+        value_template: >-
+          {% set state = state_attr("sensor.pollen_data", "Risk").tree_pollen %}
+          {% if state == "Low" %} Faible
+          {% elif state == "Moderate"%} Moyen
+          {% elif state == "High"%} Elevée
+          {% elif state == "Very High"%} Très élevée
+          {% else %}Inconnu{% endif %}
+        attribute_templates:
+          Total: >-
+            {{ state_attr("sensor.pollen_data", "Count").tree_pollen }} /m³
+          Aulne: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Alder }} /m³
+          Bouleau: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Birch }} /m³
+          Conifère: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Cypress }} /m³
+          Orme: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Elm }} /m³
+          Noisetier: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Hazel }} /m³
+          Chêne: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Oak }} /m³
+          Pin: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Pine }} /m³
+          Platane: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree.Plane }} /m³
+          Peuplier: >-
+            {{ state_attr("sensor.pollen_data", "Species").Tree["Poplar / Cottonwood"] }} /m³
+
+      pollen_graminees:
+        friendly_name: Pollen Graminées
+        icon_template: mdi:grass
+        value_template: >-
+          {% set state = state_attr("sensor.pollen_data", "Risk").grass_pollen %}
+          {% if state == "Low" %} Faible
+          {% elif state == "Moderate"%} Moyen
+          {% elif state == "High"%} Elevée
+          {% elif state == "Very High"%} Très élevée
+          {% else %}Inconnu{% endif %}
+        attribute_templates:
+          Total: >-
+            {{ state_attr("sensor.pollen_data", "Count").grass_pollen }} /m³
+          Graminées: >-
+            {{ state_attr("sensor.pollen_data", "Species").Grass["Grass / Poaceae"] }} /m³
+            
+      pollen_plantes:
+        friendly_name: Pollen Plantes
+        icon_template: mdi:grass
+        value_template: >-
+          {% set state = state_attr("sensor.pollen_data", "Risk").weed_pollen %}
+          {% if state == "Low" %} Faible
+          {% elif state == "Moderate"%} Moyen
+          {% elif state == "High"%} Elevée
+          {% elif state == "Very High"%} Très élevée
+          {% else %}Inconnu{% endif %}
+        attribute_templates:
+          Total: >-
+            {{ state_attr("sensor.pollen_data", "Count").weed_pollen }} /m³
+          Amaranthes/Pieds-de-coqs: >-
+            {{ state_attr("sensor.pollen_data", "Species").Weed.Chenopod }} /m³
+          Armoise: >-
+            {{ state_attr("sensor.pollen_data", "Species").Weed.Mugwort }} /m³
+          Ortie: >-
+            {{ state_attr("sensor.pollen_data", "Species").Weed.Nettle }} /m³
+          Ambrosia: >-
+            {{ state_attr("sensor.pollen_data", "Species").Weed.Ragweed }} /m³
+            
+  #===============================================================================#
+  #==== LUMIERES =================================================================#
+  #===============================================================================#    
+  
+      light_recap:
+        friendly_name: Lumières
+        icon_template: mdi:lightbulb
+        value_template: >-              
+            {%- set lights = [
+                states.light.agathe_plafond,
+                states.light.bandeau,
+                states.light.bandeau_agathe,
+                states.light.chambre_plafond,
+                states.light.exterieur,
+                states.light.hall_couloir,
+                states.light.hue_color_lamp_1,
+                states.light.hue_go,
+                states.light.hue_go_1,
+                states.light.hue_go_like,
+                states.light.hue_lightstrip_bar,
+                states.light.hue_lightstrip_lit,
+                states.light.hue_lightstrip_salon_meuble,
+                states.light.hue_play_centre,
+                states.light.hue_play_droite,
+                states.light.hue_play_gauche,
+                states.light.hue_plays,
+                states.light.hue_white_lamp_1,
+                states.light.hue_white_lamp_2,
+                states.light.hue_white_lamp_3,
+                states.light.lampadaire_agathe,
+                states.light.lumiere_indirecte,
+                states.light.miroir_sdb_droite,
+                states.light.miroir_sdb_gauche,
+                states.light.notepad_k10_screen,
+                states.light.prises,
+                states.light.salle_a_manger,
+                states.light.salon_2,
+                states.light.sdb,
+                states.light.wc,
+                states.light.wled,
+                states.light.wled_2,
+                states.light.wled_master,
+                states.light.wled_segment_1,
+                states.light.wled_segment_2,
+                states.light.xiaomi_gateway_light,
+                states.light.yeelight_cuisine
+            ] %}
+            {%- set lights_on = lights | selectattr('state','eq','on') | list %}
+            {%- set lights_name = lights | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
+            {%- if (lights_on | length == 1) -%}
+              {{ lights_name }} est allumée
+            {%- elif (lights_on | length > 1) -%}
+              {{ lights_on | length }} lampes sont allumées
+            {%- else %}
+              Toutes les lumières sont éteintes
+            {%- endif -%}
+    
+  #===============================================================================#
+  #==== DIVERS ===================================================================#
+  #===============================================================================#    
+
+  - platform: template
+    sensors:
+      since_last_motion:
+        friendly_name: 'Minutes since last motion'
+        value_template: >
+          {%- set sensors = [
+            states.binary_sensor.motion_sensor_hall_entree, 
+            states.binary_sensor.motion_sensor_hall_couloir, 
+            states.binary_sensor.motion_sensor_sdb, 
+            states.binary_sensor.motion_sensor_cuisine, 
+            states.binary_sensor.mouvement_agathe_occupancy
+          ] %}
+          {%- set filtered_sensors = sensors | selectattr('last_changed','==', sensors | map(attribute='last_changed') | max) | list %}
+          {{ (( as_timestamp(now()) - as_timestamp(filtered_sensors[0].last_changed)) / 60 ) | int }}
+
+  - platform: template
+    sensors:
+      fenetre_recap:
+        friendly_name: Fenêtres
+        icon_template: mdi:window-open-variant
+        value_template: >-              
+            {%- set fenetres = [
+                states.binary_sensor.door_entree,
+                states.binary_sensor.door_window_1,
+                states.binary_sensor.door_window_2,
+                states.binary_sensor.door_window_3,
+                states.binary_sensor.door_window_4,
+                states.binary_sensor.door_window_5_chambre,
+                states.binary_sensor.door_window_6_chambre,
+                states.binary_sensor.door_window_7_agathe
+            ] %}
+            {%- set fenetre_on = fenetres | selectattr('state','eq','on') | list %}
+            {%- set fenetre_name = fenetres | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
+            {%- if (fenetre_on | length == 1) -%}
+              {{ fenetre_name }} est ouverte
+            {%- elif (fenetre_on | length > 1) -%}
+              {{ fenetre_on | length }} fenêtres sont ouvertes
+            {%- else %}
+              Toutes les fenêtres sont fermeés
+            {%- endif -%}
+              
+  - platform: template
+    sensors:
+      gautier_last_changed:
+        value_template: >
+            {% set up_time = as_timestamp(now()) - as_timestamp(states.person.gautier.last_changed) %}
+            {% set days = (up_time // (60 * 60 * 24)) | int %}
+            {% set weeks = (days // 7) | int %}
+            {% set hours = (up_time // (60 * 60)) | int %}
+            {% set hours =  hours - days * 24 %}
+            {% set minutes = (up_time // 60) | int %}
+            {% set minutes = minutes - (days * 24 * 60) - (hours * 60) %}
+            
+            {% set days = (days | int) - (weeks * 7) %}
+            
+            {% macro phrase(value, name) %}
+                      {%- set value = value | int %}
+                      {%- set end = 's' if value > 1 else '' %}
+                      {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+            {%- endmacro %}
+                
+            {% set text = [ phrase(weeks, 'semaine'), phrase(days, 'jour'), phrase(hours, 'heure'), 
+                            phrase(minutes, 'minute') ] | select('!=','') | list | join(', ') %}
+            {% set last_comma = text.rfind(',') %}
+            {% if last_comma > 0 %}
+              {% set text = text[:last_comma] + ' et' + text[last_comma + 1:] %}
+            {%- endif %}
+            {{ text }}
+      manon_last_changed:
+        value_template: >
+            {% set up_time = as_timestamp(now()) - as_timestamp(states.person.manon.last_changed) %}
+            {% set days = (up_time // (60 * 60 * 24)) | int %}
+            {% set weeks = (days // 7) | int %}
+            {% set hours = (up_time // (60 * 60)) | int %}
+            {% set hours =  hours - days * 24 %}
+            {% set minutes = (up_time // 60) | int %}
+            {% set minutes = minutes - (days * 24 * 60) - (hours * 60) %}
+            
+            {% set days = (days | int) - (weeks * 7) %}
+            
+            {% macro phrase(value, name) %}
+                      {%- set value = value | int %}
+                      {%- set end = 's' if value > 1 else '' %}
+                      {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+            {%- endmacro %}
+                
+            {% set text = [ phrase(weeks, 'semaine'), phrase(days, 'jour'), phrase(hours, 'heure'), 
+                            phrase(minutes, 'minute') ] | select('!=','') | list | join(', ') %}
+            {% set last_comma = text.rfind(',') %}
+            {% if last_comma > 0 %}
+              {% set text = text[:last_comma] + ' et' + text[last_comma + 1:] %}
+            {%- endif %}
+            {{ text }}
+      porte_last_changed:
+        value_template: >
+            {% set up_time = as_timestamp(now()) - as_timestamp(states.binary_sensor.door_entree.last_changed) %}
+            {% set days = (up_time // (60 * 60 * 24)) | int %}
+            {% set weeks = (days // 7) | int %}
+            {% set hours = (up_time // (60 * 60)) | int %}
+            {% set hours =  hours - days * 24 %}
+            {% set minutes = (up_time // 60) | int %}
+            {% set minutes = minutes - (days * 24 * 60) - (hours * 60) %}
+            
+            {% set days = (days | int) - (weeks * 7) %}
+            
+            {% macro phrase(value, name) %}
+                      {%- set value = value | int %}
+                      {%- set end = 's' if value > 1 else '' %}
+                      {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+            {%- endmacro %}
+                
+            {% set text = [ phrase(weeks, 'semaine'), phrase(days, 'jour'), phrase(hours, 'heure'), 
+                            phrase(minutes, 'minute') ] | select('!=','') | list | join(', ') %}
+            {% set last_comma = text.rfind(',') %}
+            {% if last_comma > 0 %}
+              {% set text = text[:last_comma] + ' et' + text[last_comma + 1:] %}
+            {%- endif %}
+            {{ text }}
+  
+  - platform: template
+    sensors:
+      ephemeride:
+        value_template: '{{ states.calendar.fetes_des_prenoms.attributes.message }}'
+        friendly_name: 'Saint du jour'
+      vacuum_total_cleaned_area:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.total_cleaned_area }}'
+        friendly_name: 'Total m2 netoyés'
+        icon_template: mdi:texture-box
+      vacuum_total_cleaning_time:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.total_cleaning_time }}'
+        friendly_name: 'Temps total'
+        icon_template: mdi:timer-sand
+      vacuum_fan_speed:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.fan_speed }}'
+        friendly_name: 'Vitesse'
+        icon_template: mdi:fan
+      vacuum_battery_level:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_level }}'
+        friendly_name: 'Batterie'
+        icon_template: mdi:battery-high
+      vacuum_main_brush_left:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.main_brush_left }}'
+        friendly_name: 'Brosse principale'
+      vacuum_side_brush_left:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.side_brush_left }}'
+        friendly_name: 'Brosse laterale'
+      vacuum_filter_left:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.filter_left }}'
+        friendly_name: 'Filtre'
+      vacuum_sensor_dirty_left:
+        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.sensor_dirty_left }}'
+        friendly_name: 'Capteurs'
+        
+  - platform: template
+    sensors:
+      gautier_status:
+        value_template: '{{ states.input_select.gautier_status_dropdown.state }}'
+        friendly_name: 'Gautier'
+      manon_status:
+        value_template: '{{ states.input_select.manon_status_dropdown.state }}'
+        friendly_name: 'Manon'
+    
+  # - platform: spotify-playlist-sensor
+  #   client_id: !secret spotify_client_id_2
+  #   client_secret: !secret spotify_client_secret_2
+    
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_iso'
+      - 'time_date'
+      
+  - platform: template
+    sensors:
+      full_date:
+        value_template: >
+          {%- set date = as_timestamp(now()) -%}
+          {% set jour = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"] %}
+          {% set mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"] %}
+          {% set m_ok = date | timestamp_custom("%m") | int %}
+          {% set j_ok = date | timestamp_custom("%w") | int %}
+          {% set nom_jour = jour[j_ok] %}
+          {% set jours_semaine = date | timestamp_custom("%d") %}
+          {% set mois = mois[m_ok - 1] %}
+          {{ nom_jour }} {{ jours_semaine }} {{ mois }}
+        friendly_name: Full date
+        unit_of_measurement: ''  
+      full_time:
+        value_template: "{{ as_timestamp(states('sensor.date_time_iso')) | timestamp_custom('%X') }}"
+        friendly_name: Full time
+      
+      
+  # - platform: cryptoinfo
+  #   id: "Binance"                
+  #   cryptocurrency_name: "eth"  
+  #   currency_name: "usd"             
+  #   multiplier: 1                    
+  #   update_frequency: 15
+
+      
+  - platform: darksky
+    api_key: !secret dark_sky_api_key
+    scan_interval: 1200
+    language: 'fr'
+    forecast:
+      - 0
+    monitored_conditions:
+      - summary
+      - precip_probability
+      - apparent_temperature_high
+      - apparent_temperature_low
+
+      
+  - platform: template
+    sensors:
+      nextsunrise:
+        entity_id: sun.sun
+        friendly_name: 'Next Sunrise'
+        value_template: >
+          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %H:%M ') }}
+        icon_template: mdi:weather-sunset-up
+      nextsunset:
+        entity_id: sun.sun
+        friendly_name: 'Next Sunset'
+        value_template: >
+          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %H:%M ') }}
+        icon_template: mdi:weather-sunset-down
+  
+  
+  - platform: scrape
+    resource: https://www.savoir-inutile.com/
+    scan_interval: 7200
+    name: Savoir scrape
+    select: "#phrase"
+    
+    
+  - platform: prixCarburant
+    stationID:
+      - 6140004
+      - 6480002
+      
+  - platform: template
+    sensors:
+      98_leclerc:
+        friendly_name: 'SP98 Leclerc'
+        value_template: >
+          {{ state_attr("sensor.prixcarburant_leclerc", "E98") }}
+        unit_of_measurement: "€"
+      95_leclerc:
+        friendly_name: 'SP95 Leclerc'
+        value_template: >
+          {{ state_attr("sensor.prixcarburant_leclerc", "E95") }}
+        unit_of_measurement: "€"
+    
+  - platform: rest
+    name: Kiosk Device Info
+    resource: !secret rest_url_kiosk_device_info
+    json_attributes:
+    - screenBrightness
+    - isScreenOn
+    value_template: 'OK'
+  
+  - platform: rest
+    name: 'vacances domogeek'
+    resource: http://domogeek.entropialux.com/holidayall/B/now
+    json_attributes:
+      - schoolholiday
+    value_template: '{{value_json.schoolholiday}}'
+    scan_interval: 21600
+    headers: 
+      User-Agent: Home Assistant
+      Content-Type: application/json
+  
+  - platform: template
+    sensors:
+      vacances:
+        value_template: >-
+          {% if is_state("sensor.vacances_domogeek", "False") -%}
+            Non
+          {%- else -%}
+            {{ states('sensor.vacances_domogeek') }}
+          {%- endif %}
+        friendly_name: 'Vancances' 
+  
+  #===============================================================================#
+  #==== POIDS ====================================================================#
+  #===============================================================================#
+  
+  - platform: mqtt
+    name: "Gautier Weight"
+    state_topic: "miscale/Gautier/weight"
+    value_template: "{{ value_json['weight'] }}"
+    unit_of_measurement: "kg"
+    json_attributes_topic: "miscale/Gautier/weight"
+    icon: mdi:scale-bathroom
+  
+  - platform: mqtt
+    name: "Gautier BMI"
+    state_topic: "miscale/Gautier/weight"
+    value_template: "{{ value_json['bmi'] }}"
+    icon: mdi:human-pregnant
+    unit_of_measurement: "kg/m2"
+    
+  #===============================================================================#
+  #==== ELEC =====================================================================#
+  #===============================================================================#
+  
+  - platform: template
+    sensors:
+      elec_current_price:
+        value_template: '{{ (states.sensor.consommation_day.state|float*0.1452)|float|round(2) }}'  
+        friendly_name: "Coût Aujourd'hui"
+        unit_of_measurement: '€'
+      elec_yesterday_price:
+        value_template: '{{ (states.sensor.consommation_day.attributes.last_period|float*0.1452)|float|round(2) }}'  
+        friendly_name: 'Coût Hier' 
+        unit_of_measurement: '€'
+      elec_current_week_price:
+        value_template: '{{ (states.sensor.consommation_week.state|float*0.1452)|float|round(2) }}'  
+        friendly_name: 'Coût Semaine' 
+        unit_of_measurement: '€'       
+      elec_current_month_price:
+        value_template: '{{ (states.sensor.consommation_month.state|float*0.1452+11)|float|round(2) }}'  
+        friendly_name: 'Coût Mois' 
+        unit_of_measurement: '€'
+      elec_last_month_price:
+        value_template: '{{ (states.sensor.consommation_month.attributes.last_period|float*0.1452+11)|float|round(2) }}'  
+        friendly_name: 'Coût Dernier Mois' 
+        unit_of_measurement: '€'
+      elec_current_year_price:
+        value_template: '{{ (states.sensor.consommation_year.state|float*0.1452+132)|float|round(2) }}'  
+        friendly_name: 'Coût Année' 
+        unit_of_measurement: '€'
+        
+  - platform: template
+    sensors:
+      consommation_yesterday:
+        value_template: '{{ states.sensor.consommation_month.attributes.last_period }}'  
+        friendly_name: "Conssomation hier"
+        unit_of_measurement: 'kWh'  
+  
+  #===============================================================================#
+  #==== IMPRIMANTE 3D ============================================================#
+  #===============================================================================#
+  - platform: rest
+    name: spaghetti_sensor
+    resource: "http://192.168.2.32:7125/printer/objects/query?heater_bed&extruder&print_stats&toolhead&display_status&virtual_sdcard"
+    json_attributes_path: "$.result.status"
+    json_attributes:
+      - heater_bed
+      - extruder
+      - print_stats
+      - toolhead
+      - display_status
+      - virtual_sdcard
+    value_template: 'OK'
+  - platform: template
+    sensors:
+      spaghetti_hotend_target:
+        friendly_name: 'Hotend Target'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["extruder"]["target"]  | float | round(1) }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        icon_template: mdi:thermometer
+      spaghetti_hotend_actual:
+        friendly_name: 'Hotend Actual'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["extruder"]["temperature"]  | float | round(1) }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        icon_template: mdi:thermometer
+      spaghetti_bed_target:
+        friendly_name: 'Bed Target'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["heater_bed"]["target"]  | float | round(1) }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        icon_template: mdi:thermometer
+      spaghetti_bed_actual:
+        friendly_name: 'Bed Actual'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["heater_bed"]["temperature"]  | float | round(1) }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+        icon_template: mdi:thermometer
+      spaghetti_state:
+        friendly_name: 'Printer State'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["print_stats"]["state"]}}'
+        icon_template: >
+          {% set val =  states.sensor.spaghetti_sensor.attributes["print_stats"]["state"]  %}
+          {% if val == 'standby' %}
+            mdi:sleep
+          {% elif val == 'error' %}
+            mdi:alert-circle
+          {% elif val == 'printing' %}
+            mdi:printer-3d-nozzle
+          {% elif val == 'paused' %}
+            mdi:pause-circle
+          {% elif val == 'complete' %}
+            mdi:printer-3d
+          {% else %}
+            mdi:help-circle
+          {% endif %}
+      spaghetti_current_print:
+        friendly_name: 'Current Print'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["print_stats"]["filename"]}}'
+      spaghetti_current_progress:
+        friendly_name: 'Progress'
+        value_template: '{{ ((states.sensor.spaghetti_sensor.attributes["display_status"]["progress"])*100) | round(0, "floor") }}'
+        unit_of_measurement: '%'
+        icon_template: mdi:progress-clock
+      spaghetti_print_time:
+        friendly_name: 'Time Elapsed'
+        value_template: '{{ states.sensor.spaghetti_sensor.attributes["print_stats"]["print_duration"] |timestamp_custom("%H:%M:%S", 0)}}'
+        icon_template: mdi:camera-timer
+      spaghetti_time_remaining:
+        friendly_name: 'Time Remaining'
+        value_template: '{{ (((states.sensor.spaghetti_sensor.attributes["print_stats"]["print_duration"]/states.sensor.spaghetti_sensor.attributes["display_status"]["progress"]- states.sensor.spaghetti_sensor.attributes["print_stats"]["print_duration"]) if states.sensor.spaghetti_sensor.attributes["display_status"]["progress"]>0 else 0)) | timestamp_custom("%H:%M:%S", 0)}}'
+        icon_template: mdi:timer-sand
+      spaghetti_eta:
+        friendly_name: 'ETA'
+        value_template: '{{ (as_timestamp(now())+2*60*60+((states.sensor.spaghetti_sensor.attributes["print_stats"]["print_duration"]/states.sensor.spaghetti_sensor.attributes["display_status"]["progress"]- states.sensor.spaghetti_sensor.attributes["print_stats"]["print_duration"]) if states.sensor.spaghetti_sensor.attributes["display_status"]["progress"]>0 else 0)) | timestamp_custom("%H:%M:%S", 0)}}'
+        icon_template: mdi:av-timer
+      spaghetti_nozzletemp:
+        friendly_name: 'Nozzle Temperature'
+        value_template: '{{[( states.sensor.spaghetti_sensor.attributes["extruder"]["temperature"]  | float | round(1)| string)," / ",( states.sensor.spaghetti_sensor.attributes["extruder"]["target"]  | float | round(1)| string)]|join}}'
+        icon_template: mdi:thermometer
+      spaghetti_bedtemp:
+        friendly_name: 'Bed Temperature'
+        value_template: '{{[( states.sensor.spaghetti_sensor.attributes["heater_bed"]["temperature"]  | float | round(1)| string)," / ",( states.sensor.spaghetti_sensor.attributes["heater_bed"]["target"]  | float | round(1)| string)]|join}}'
+        icon_template: mdi:thermometer
+  
+  - platform: rest
+    scan_interval: 15
+    name: klipper_preview_path
+    resource_template: "http://192.168.2.32:7125/server/files/metadata?filename={{ states(('sensor.spaghetti_current_print')) }}"
+    json_attributes_path: "$.result.thumbnails.[1]"
+    json_attributes:
+      - data
+      - width
+      - height
+      - size
+    value_template: 'OK'
+    
+  
+  #===============================================================================#
+  #==== SYSTEME ==================================================================#
+  #===============================================================================#
+  
+  - platform: uptime
+    name: Hassio Uptime
+    unit_of_measurement: minutes
+    
+  - platform: version
+    source: hassio
+  
+  - platform: authenticated
+    enable_notification: false
+  
+  - platform: command_line
+    name: Supervisor updates
+    command: 'curl http://supervisor/supervisor/info -H "Authorization: Bearer $(printenv SUPERVISOR_TOKEN)" | jq ''{"newest_version":.data.version_latest,"current_version":.data.version,"addons":[.data.addons[] | select(.version != .installed)]}'''
+    value_template: "{{ value_json.addons | length }}"
+    json_attributes:
+      - newest_version
+      - current_version
+      - addons
+  
+  - platform: systemmonitor
+    resources:
+          - type: disk_use_percent
+            arg: /home
+          - type: memory_use_percent
+          - type: memory_use
+          - type: swap_use
+          - type: swap_free
+          - type: swap_use_percent
+          - type: load_1m
+          - type: load_5m
+          - type: load_15m
+          - type: memory_free
+          - type: last_boot
+          - type: processor_use
+          - type: network_in
+            arg: eth0
+          - type: network_out
+            arg: eth0
+          - type: ipv4_address
+            arg: eth0
+          - type: throughput_network_in
+            arg: eth0
+          - type: throughput_network_out
+            arg: eth0
+          - type: processor_use
+  
+  - platform: template
+    sensors:
+    #----- Count Automations
+      count_automations:
+        entity_id: sensor.date
+        value_template: "{{ states.automation | list | length }}"
+    #----- Count Scripts
+      count_scripts:
+        entity_id: sensor.date
+        value_template: "{{ states.script| list | length }}"
+    #----- Count Device Trackers
+      count_device_trackers:
+        entity_id: sensor.date
+        value_template: "{{ states.device_tracker | list | length }}"
+    #----- Count Binary Sensors
+      count_binary_sensors:
+        entity_id: sensor.date
+        value_template: "{{ states.binary_sensor| list | length }}"
+    #----- Count Sensors
+      count_sensors:
+        entity_id: sensor.date
+        value_template: "{{ states.sensor | list | length }}"
+    #----- Count Switches
+      count_switches:
+        entity_id: sensor.date
+        value_template: "{{ states.switch | list | length }}"
+    #----- Count Zones
+      count_zones:
+        entity_id: sensor.date
+        value_template: "{{ states.zone | list | length }}"
+    #----- Input Booleans
+      count_input_booleans:
+        entity_id: sensor.date
+        value_template: "{{ states.input_boolean | list | length }}"
+    #----- Input Numbers
+      count_input_numbers:
+        entity_id: sensor.date
+        value_template: "{{ states.input_number | list | length }}"
+    #----- Input Texts
+      count_input_texts:
+        entity_id: sensor.date
+        value_template: "{{ states.input_text | list | length }}"
+    #----- Input Selects
+      count_input_selects:
+        entity_id: sensor.date
+        value_template: "{{ states.input_select | list | length }}"
+    #----- Input Date Times
+      count_input_datetimes:
+        entity_id: sensor.date
+        value_template: "{{ states.input_datetime | list | length }}"
+  
+  
+  
+  
+  
+  
+  

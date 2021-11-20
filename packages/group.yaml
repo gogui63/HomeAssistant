@@ -1,0 +1,64 @@
+group:
+  all_windows:
+      name: Fenêtres
+      icon: mdi:window-shutter
+      entities:
+          - binary_sensor.door_window_1
+          - binary_sensor.door_window_2
+          - binary_sensor.door_window_3
+          - binary_sensor.door_window_4
+          - binary_sensor.door_window_5_chambre
+          - binary_sensor.door_window_6_chambre
+          - binary_sensor.door_window_7_gedeon
+      
+  all_stores:
+      name: Volets
+      icon: mdi:window-shutter
+      entities:
+          - cover.volet_gedeon
+          - cover.volet_chambre
+          - cover.volet_salon
+
+
+  lights_salon:
+    - light.salle_a_manger
+    - light.salon_2
+    - light.hue_color_lamp_1
+    - light.hue_lightstrip_bar
+    - light.hue_lightstrip_salon_meuble
+    - light.hue_play_centre
+    - light.hue_play_gauche
+    - light.hue_play_droite
+    - light.hue_go_1
+
+  lights_chambre:
+    - light.chambre_plafond
+    - light.hue_lightstrip_lit
+
+  lights_agathe:
+    - light.agathe_plafond
+    - light.lampadaire_agathe
+
+  lights_cuisine: 
+    - light.hue_white_lamp_1
+    - light.hue_white_lamp_2
+    - light.hue_white_lamp_3
+    - light.yeelight_cuisine
+
+  lights_sdb:
+    - light.miroir_sdb_droite
+    - light.miroir_sdb_gauche
+    - light.sdb
+    
+  lights_wc: 
+    - light.wc
+
+  lights_hall:
+    - light.hall_couloir
+    - light.hue_go
+
+  people_status:
+    name: People Status
+    entities:
+      - sensor.gautier_status
+      - sensor.manon_status

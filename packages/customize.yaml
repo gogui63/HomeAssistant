@@ -1,0 +1,5 @@
+homeassistant:
+  customize:
+    #sensor.myenedis_25470188006655:
+    #  friendly_name: Enedis
+    #  icon: mdi:flash

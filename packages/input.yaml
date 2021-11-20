@@ -1,0 +1,69 @@
+input_select:
+  gautier_status_dropdown:
+    name: Gautier
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+  manon_status_dropdown:
+    name: Manon
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Away
+      - Extended Away
+    initial: Home
+  mode_dropdown:
+    name: Mode
+    options:
+      - Present Jour
+      - Present Nuit
+      - Absent
+      - Télétravail
+    initial: Absent
+
+input_boolean:
+  is_jour:
+    name: Mode Jour
+    initial: on
+    icon: mdi:weather-sunny
+  sieste_agathe:
+    name: Sieste Agahe
+    initial: on
+    icon: mdi:baby
+  wc_motion_detection:
+    name: WC Motion Detection
+    initial: off
+  presence:
+    name: Présence
+  pluie:
+    name: Pluie
+    icon: mdi:weather-rainy
+    initial: off
+  holidays:
+    name: Vacances
+    initial: off
+  annonce_caca:
+    name: Vocal caca
+    initial: off
+  guest_mode:
+    name: Mode invité
+    initial: off
+  get_allergies_data:
+    name: Rafraichir allergies
+    initial: off
+  reset_allergies_sensor:
+    name: Reset allergies
+    initial: off
+    
+input_number:
+  test_benoit_input_number:
+   name: Slider
+   initial: 7
+   min: 0
+   max: 8
+   step: 1

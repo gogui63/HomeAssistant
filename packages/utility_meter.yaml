@@ -1,0 +1,16 @@
+utility_meter:
+  consommation_hour:
+    source: sensor.index
+    cycle: hourly
+  consommation_day:
+    source: sensor.index
+    cycle: daily
+  consommation_week:
+    source: sensor.index
+    cycle: weekly
+  consommation_month:
+    source: sensor.index
+    cycle: monthly
+  consommation_year:
+    source: sensor.index
+    cycle: yearly

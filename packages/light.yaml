@@ -1,0 +1,11 @@
+light:
+  - platform: group
+    name: Lumiere Indirecte
+    entities:
+      - light.hue_go_1
+      - light.hue_go
+      - light.hue_lightstrip_bar
+      - light.hue_lightstrip_salon_meuble
+      - light.hue_play_centre
+      - light.hue_play_gauche
+      - light.hue_play_droite
