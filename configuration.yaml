@@ -1,0 +1,186 @@
+default_config:
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+stream:
+python_script:
+discovery:
+frontend: 
+  themes: !include_dir_merge_named themes/ 
+
+
+homeassistant:
+  packages: !include_dir_named packages
+  #customize: !include packages/customize.yaml
+  external_url: !secret default_url
+  internal_url: !secret internal_url
+  allowlist_external_dirs:
+  - "/tmp"
+  - /config/
+
+
+# logger:
+#   default: info
+#   logs:
+#       homeassistant.components.netatmo: debug
+
+recorder:
+  purge_keep_days: 7 
+  exclude: 
+    domains: 
+      - camera  
+    entities: 
+      - camera.henry_map
+    event_types: 
+      - call_service 
+
+mqtt:
+  broker: 192.168.2.17
+  username: !secret mosquitto_username
+  password: !secret mosquitto_password
+  discovery: true
+
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistantDB
+  username: !secret influxdb_user
+  password: !secret influxdb_password
+  max_retries: 3
+  default_measurement: state
+  include:
+    entities:
+      - sensor.gautier_weight
+      - sensor.manon_weight
+      - sensor.netatmo_maison_salon_pluviometre_rain_today
+      - climate.clim_salon
+      - climate.clim_chambre
+    entity_globs:
+      - sensor.*temperature*
+      - sensor.enedis*
+      - sensor.elec_*
+      - sensor.consommation_*
+
+alarm_control_panel:
+  - platform: manual
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - !secret ip_nas
+    - !secret ip_public
+  cors_allowed_origins:
+    - !secret default_url
+    - !secret domaine_url
+    - https://cast.home-assistant.io
+
+tts:
+  - platform: google_cloud
+    key_file: google_tts.json
+    language: fr-FR
+    gender: female
+    speed: 0.75
+    voice: fr-FR-Wavenet-A
+
+device_tracker:
+  - platform: mqtt
+    devices:
+      nut_manon_monitor: 'presence/debian/nut_manon_monitor/device_tracker'
+      nut_gautier_monitor: 'presence/debian/nut_gautier_monitor/device_tracker'
+
+telegram_bot:
+  - platform: webhooks
+    api_key: !secret telegram_api_key
+    parse_mode: html
+    allowed_chat_ids:
+      - !secret telegram_manon
+      - !secret telegram_gautier
+
+notify:
+  - name: telegram_gautier
+    platform: telegram
+    chat_id: !secret telegram_gautier
+  - name: telegram_manon
+    platform: telegram
+    chat_id: !secret telegram_manon
+  - platform: discord
+    name: discord
+    token: !secret discord_bot_token
+
+media_player:
+  - platform: androidtv
+    name: "Shield-AndroidTV"
+    host: 192.168.2.198
+    #device_class: androidtv
+    #adbkey: "/config/adb/adbkey"
+  - platform: androidtv
+    name: "videoprojecteur-AndroidTV"
+    host: 192.168.2.100
+
+xiaomi_aqara:
+  discovery_retry: 10
+  gateways:
+    - mac: !secret xiaomi_mac_gateway
+      key: !secret xiaomi_key_gateway
+      host: 192.168.2.14
+
+yeelight:
+  devices:
+    192.168.2.19:
+      name: Yeelight Cuisine
+
+netatmo:
+  client_id: !secret netatmo_client_id
+  client_secret: !secret netatmo_client_secret
+
+ble_monitor:
+  decimals: 1
+  period: 300
+  log_spikes: False
+  use_median: True
+  active_scan: False
+  discovery: True
+  hci_interface: 1
+  devices:
+    - mac: 'F8:24:41:C1:C3:AE'
+      name: 'Dimmer Xiaomi'
+      reset_timer: 1
+      encryption_key: '1DEA52ADD5854D516F19F00C'
+      
+shelly:
+  discovery: true
+  sensors:
+    - all 
+
+# vacuum:
+#   - platform: xiaomi_miio
+#     host: 192.168.2.70
+#     token: !secret xiaomi_vacuum_token
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+spotcast:
+  sp_dc: !secret spotcast_sp_dc
+  sp_key: !secret spotcast_sp_key
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+  project_id: !secret nest_project_id
+  subscriber_id: !secret nest_subscriber_id
+
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
+weather:
+  - platform: darksky
+    api_key: !secret dark_sky_api_key
+
+shell_command:
+  cec_on: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 \"tvservice --off && sudo echo 'on 0.0.0.0' | cec-client -s\""
+  cec_off: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 \"sudo echo 'standby 0.0.0.0' | cec-client -s\""
+  reboot_pi: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 'sudo reboot'"
+  gcode_preview_py: 'python /python_scripts/imgconvert.py {{ states.sensor.klipper_preview_path.attributes["data"] }}'
