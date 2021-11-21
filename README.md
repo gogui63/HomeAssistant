@@ -40,10 +40,20 @@ Cloud:
 
 # Screenshots
 
-<img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png"/> <img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png"/>
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png)
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png)
-
+<table>
+  <tr>
+    <td><img src="ttps://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png" width=270 height=480></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png" width=270 height=480></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png" width=270 height=480></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png" width=270 height=480></td>
+  </tr>
+   <tr>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png" width=270 height=480></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png" width=270 height=480></td>
+  </tr>
+ </table>
 
 
 [Toutes mes screenshots](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/)
