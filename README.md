@@ -40,11 +40,11 @@ Cloud:
 
 # Screenshots
 
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png)
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png)
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png)
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png)
-![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png)
+
+
+![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png)
+![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png)
+![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png)
 
 
 [Toutes mes screenshots](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/)
