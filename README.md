@@ -41,7 +41,6 @@ Cloud:
 # Screenshots
 
 
-Solarized dark             |  Solarized Ocean
 :-------------------------:|:-------------------------:
 ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png)
 ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png) | ![alt text](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png)
