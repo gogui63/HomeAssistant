@@ -1,20 +1,21 @@
 # HomeAssistant
 
-Bienvenue sur le repo dedié à ma configuration home assistant
+Bienvenue sur le repo dedié à ma configuration Home Assistant
+
 Mon **setup home assistant** est constitué de : 
  - NUC Intel comme base (un petit Intel(R) Core(TM) **i3**-3217U CPU @ 1.80GHz) couplé à **4Go de RAM** + eMMC de **128Go**
  - Dongle **Zwave** Aeotec ZW090 "Z-Stick" GEN5 
  - Dongle **Zigbee** C2531 
  - Dongle **Bluetooth** SENA UD100-G03
 
-La majorité des intéractions se font via les assistant vocaux (Google Nest / Home)
+La majorité des intéractions se font via les assistants vocaux (Google Nest / Home)
 
-La consultation / interaction se fait également via une tablette murale (Température / Humidité / Alerte / Alarme)
+La consultation / interaction se fait également via une tablette murale (Température / Humidité / Alerte / Alarme / Clim / chauffage)
 
 
-Coté **réseau** le tout est drivé (en attandant de migrer sous Unifi / Ubiquiti) d'un routeur Asus sous OpenWRT (AsusWRT).
+Coté **réseau** le tout est drivé (en attandant de migrer sous Unifi / Ubiquiti) par un routeur Asus sous OpenWRT (AsusWRT).
 
-J'ai également un **NAS Synology** qui me sert de parefeu / reverse proxy. 
+J'ai également un **NAS Synology** qui me sert entre autre de reverse proxy. 
 
 C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imprimante 3D, plex, stockage, home assistant, ...)
 
@@ -49,16 +50,16 @@ C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imp
 
 <table>
   <tr>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png" width=270 height=530></td>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png" width=270 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png" width=265 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/ha.png" width=265 height=530></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png" width=270 height=530></td>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png" width=270 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home2.png" width=265 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/light.png" width=265 height=530></td>
   </tr>
    <tr>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png" width=270 height=530></td>
-    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png" width=270 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers.png" width=265 height=530></td>
+    <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png" width=265 height=530></td>
   </tr>
  </table>
 
