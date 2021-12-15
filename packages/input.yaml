@@ -25,6 +25,13 @@ input_select:
       - Absent
       - Télétravail
     initial: Absent
+  saison:
+    name: Saison
+    options:
+      - Ete
+      - Automne
+      - Printemps
+      - Hiver
 
 input_boolean:
   is_jour:
@@ -40,6 +47,9 @@ input_boolean:
     initial: off
   presence:
     name: Présence
+  teletravail:
+    name: Télétravail
+    icon: mdi:remote-desktop
   pluie:
     name: Pluie
     icon: mdi:weather-rainy
@@ -61,9 +71,49 @@ input_boolean:
     initial: off
     
 input_number:
-  test_benoit_input_number:
-   name: Slider
-   initial: 7
-   min: 0
-   max: 8
-   step: 1
+  clim_chauffage_consigne_min:
+    name: Consigne minimum clim chauffage
+    icon: mdi:thermometer-minus
+    min: 18
+    max: 28
+    step: 0.5
+  clim_chauffage_consigne_max:
+    name: Consigne maximum clim chauffage
+    icon: mdi:thermometer-plus
+    min: 18
+    max: 28
+    step: 0.5
+  clim_chauffage_consigne_temp:
+    name: Consigne température clim chauffage
+    icon: mdi:home-thermometer
+    min: 18
+    max: 28
+    step: 0.5
+  statistics_salon_temperature_max:
+    name: Température max Salon
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_salon_temperature_min:
+    name: Température min Salon
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_ext_temperature_max:
+    name: Température max Extérieur
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_ext_temperature_min:
+    name: Température min Extérieur
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C

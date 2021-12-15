@@ -450,7 +450,54 @@ sensor:
             {{ states('sensor.vacances_domogeek') }}
           {%- endif %}
         friendly_name: 'Vancances' 
-  
+ 
+  #===============================================================================#
+  #==== STATS ====================================================================#
+  #===============================================================================#
+        
+  - platform: statistics
+    name: Statistic Température Xiaomi Salon
+    entity_id: sensor.temperature_salon
+  - platform: statistics
+    name: Statistic Température Xiaomi Chambre
+    entity_id: sensor.temperature_chambre
+  - platform: statistics
+    name: Statistic Température Extérieure
+    entity_id: sensor.netatmo_maison_salon_exterieur_temperature
+  - platform: statistics
+    name: Statistic Température Salon
+    entity_id: sensor.netatmo_maison_salon_temperature
+  - platform: statistics
+    name: Statistic Température Chambre
+    entity_id: sensor.netatmo_maison_salon_chambre_temperature
+  - platform: statistics
+    name: Statistic Température Agathe
+    entity_id: sensor.netatmo_maison_salon_agathe_temperature
+  - platform: statistics
+    name: Statistic Température Cuisine
+    entity_id: sensor.temperature_cuisine
+  - platform: statistics
+    name: Statistic Température SDB
+    entity_id: sensor.temperature_sdb
+  - platform: statistics
+    name: Statistic Pluie
+    entity_id: sensor.netatmo_maison_salon_pluviometre_rain_today
+  - platform: statistics
+    name: Statistic Humidité Salon
+    entity_id: sensor.humidity_salon
+  - platform: statistics
+    name: Statistic Humidité Chambre
+    entity_id: sensor.humidity_chambre
+  - platform: statistics
+    name: Statistic CO2 Salon
+    entity_id: sensor.netatmo_maison_salon_co2
+  - platform: statistics
+    name: Statistic CO2 Chambre
+    entity_id: sensor.netatmo_maison_salon_chambre_co2
+  - platform: statistics
+    name: Statistic CO2 Agathe
+    entity_id: sensor.netatmo_maison_salon_agathe_co2
+       
   #===============================================================================#
   #==== POIDS ====================================================================#
   #===============================================================================#
@@ -504,7 +551,7 @@ sensor:
   - platform: template
     sensors:
       consommation_yesterday:
-        value_template: '{{ states.sensor.consommation_month.attributes.last_period }}'  
+        value_template: '{{ states.sensor.consommation_day.attributes.last_period }}'  
         friendly_name: "Conssomation hier"
         unit_of_measurement: 'kWh'  
   

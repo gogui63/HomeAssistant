@@ -3,6 +3,7 @@ default_config:
 automation: !include automations.yaml
 script: !include scripts.yaml
 stream:
+readme:
 python_script:
 discovery:
 frontend: 
@@ -25,14 +26,19 @@ homeassistant:
 #       homeassistant.components.netatmo: debug
 
 recorder:
-  purge_keep_days: 7 
+  purge_keep_days: 15 
   exclude: 
     domains: 
       - camera  
     entities: 
       - camera.henry_map
     event_types: 
-      - call_service 
+      - call_service
+  # include:
+  #   entity_globs:
+  #     - sensor.consommation_*
+  #     - sensor.elec_*
+
 
 mqtt:
   broker: 192.168.2.17
