@@ -12,7 +12,6 @@ frontend:
 
 homeassistant:
   packages: !include_dir_named packages
-  #customize: !include packages/customize.yaml
   external_url: !secret default_url
   internal_url: !secret internal_url
   allowlist_external_dirs:
@@ -34,14 +33,9 @@ recorder:
       - camera.henry_map
     event_types: 
       - call_service
-  # include:
-  #   entity_globs:
-  #     - sensor.consommation_*
-  #     - sensor.elec_*
-
 
 mqtt:
-  broker: 192.168.2.17
+  broker: !secret local_ip_nuc
   username: !secret mosquitto_username
   password: !secret mosquitto_password
   discovery: true
@@ -73,7 +67,7 @@ alarm_control_panel:
 http:
   use_x_forwarded_for: true
   trusted_proxies: 
-    - !secret ip_nas
+    - !secret local_ip_nas
     - !secret ip_public
   cors_allowed_origins:
     - !secret default_url
@@ -116,52 +110,27 @@ notify:
 media_player:
   - platform: androidtv
     name: "Shield-AndroidTV"
-    host: 192.168.2.198
-    #device_class: androidtv
-    #adbkey: "/config/adb/adbkey"
+    host: !secret local_ip_shield
   - platform: androidtv
     name: "videoprojecteur-AndroidTV"
-    host: 192.168.2.100
+    host: !secret local_ip_videoprojecteur
 
 xiaomi_aqara:
   discovery_retry: 10
   gateways:
     - mac: !secret xiaomi_mac_gateway
       key: !secret xiaomi_key_gateway
-      host: 192.168.2.14
-
-yeelight:
-  devices:
-    192.168.2.19:
-      name: Yeelight Cuisine
+      host: !secret local_ip_xiaomi_gateway
 
 netatmo:
   client_id: !secret netatmo_client_id
   client_secret: !secret netatmo_client_secret
 
-ble_monitor:
-  decimals: 1
-  period: 300
-  log_spikes: False
-  use_median: True
-  active_scan: False
-  discovery: True
-  hci_interface: 1
-  devices:
-    - mac: 'F8:24:41:C1:C3:AE'
-      name: 'Dimmer Xiaomi'
-      reset_timer: 1
-      encryption_key: '1DEA52ADD5854D516F19F00C'
-      
+
 shelly:
   discovery: true
   sensors:
     - all 
-
-# vacuum:
-#   - platform: xiaomi_miio
-#     host: 192.168.2.70
-#     token: !secret xiaomi_vacuum_token
 
 spotify:
   client_id: !secret spotify_client_id
@@ -186,7 +155,7 @@ weather:
     api_key: !secret dark_sky_api_key
 
 shell_command:
-  cec_on: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 \"tvservice --off && sudo echo 'on 0.0.0.0' | cec-client -s\""
-  cec_off: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 \"sudo echo 'standby 0.0.0.0' | cec-client -s\""
-  reboot_pi: "ssh -i /config/ssh_keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@192.168.2.196 'sudo reboot'"
+  cec_on: !secret cec_on 
+  cec_off: !secret cec_off
+  reboot_pi: !secret reboot_pi
   gcode_preview_py: 'python /python_scripts/imgconvert.py {{ states.sensor.klipper_preview_path.attributes["data"] }}'

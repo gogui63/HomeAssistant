@@ -160,10 +160,12 @@ sensor:
             {%- else %}
               Toutes les lumières sont éteintes
             {%- endif -%}
+        
     
   #===============================================================================#
   #==== DIVERS ===================================================================#
   #===============================================================================#    
+
 
   - platform: template
     sensors:
@@ -290,11 +292,11 @@ sensor:
         value_template: '{{ states.calendar.fetes_des_prenoms.attributes.message }}'
         friendly_name: 'Saint du jour'
       vacuum_total_cleaned_area:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.total_cleaned_area }}'
+        value_template: '{{ states("sensor.xiaomi_vacuum_cleaner_last_clean_area") | float | round(2) }}'
         friendly_name: 'Total m2 netoyés'
         icon_template: mdi:texture-box
       vacuum_total_cleaning_time:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.total_cleaning_time }}'
+        value_template: '{{ states("sensor.xiaomi_vacuum_cleaner_last_clean_duration") | float | timestamp_custom("%H:%M:%S", 0) }}'
         friendly_name: 'Temps total'
         icon_template: mdi:timer-sand
       vacuum_fan_speed:
@@ -305,18 +307,6 @@ sensor:
         value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_level }}'
         friendly_name: 'Batterie'
         icon_template: mdi:battery-high
-      vacuum_main_brush_left:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.main_brush_left }}'
-        friendly_name: 'Brosse principale'
-      vacuum_side_brush_left:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.side_brush_left }}'
-        friendly_name: 'Brosse laterale'
-      vacuum_filter_left:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.filter_left }}'
-        friendly_name: 'Filtre'
-      vacuum_sensor_dirty_left:
-        value_template: '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.sensor_dirty_left }}'
-        friendly_name: 'Capteurs'
         
   - platform: template
     sensors:
@@ -439,6 +429,18 @@ sensor:
     headers: 
       User-Agent: Home Assistant
       Content-Type: application/json
+      
+  - platform: rest
+    name: 'Ephemeride domogeek'
+    resource: http://domogeek.entropialux.com/feastedsaint/now
+    value_template: '{{value}}'
+    scan_interval: 21600
+    headers: 
+      User-Agent: Home Assistant
+      Content-Type: application/json
+        
+      
+      
   
   - platform: template
     sensors:
@@ -560,7 +562,7 @@ sensor:
   #===============================================================================#
   - platform: rest
     name: spaghetti_sensor
-    resource: "http://192.168.2.32:7125/printer/objects/query?heater_bed&extruder&print_stats&toolhead&display_status&virtual_sdcard"
+    resource: !secret url_fluidd
     json_attributes_path: "$.result.status"
     json_attributes:
       - heater_bed
@@ -646,7 +648,7 @@ sensor:
   - platform: rest
     scan_interval: 15
     name: klipper_preview_path
-    resource_template: "http://192.168.2.32:7125/server/files/metadata?filename={{ states(('sensor.spaghetti_current_print')) }}"
+    resource_template: !secret url_fluidd_preview
     json_attributes_path: "$.result.thumbnails.[1]"
     json_attributes:
       - data

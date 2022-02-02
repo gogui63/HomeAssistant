@@ -22,6 +22,13 @@ google_assistant:
       expose: true
       aliases:
         - Interrupteur Cuisine
+    switch.sonoff_sdb:
+      name: Lumière miroir sdb
+      room: Salle de bain
+      expose: true
+      aliases:
+        - Miroir SDB
+        - Interrupteur miroir SDB
     sensor.mi_temp_salon:
       name: Temperature Salon
       room: Salon
