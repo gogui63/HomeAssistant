@@ -5,7 +5,7 @@ Bienvenue sur le repo dedié à ma configuration Home Assistant
 Mon **setup home assistant** est constitué de : 
  - NUC Intel comme base (un petit Intel(R) Core(TM) **i3**-3217U CPU @ 1.80GHz) couplé à **4Go de RAM** + eMMC de **128Go**
  - Dongle **Zwave** Aeotec ZW090 "Z-Stick" GEN5 
- - Dongle **Zigbee** C2531 
+ - Dongle **Zigbee** Sonoff 
  - Dongle **Bluetooth** SENA UD100-G03
 
 La majorité des intéractions se font via les assistants vocaux (Google Nest / Home)
