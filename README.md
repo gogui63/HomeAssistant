@@ -65,7 +65,7 @@ Vue ordinateur:
  </table>
  
  Vue mobile: 
- ![Screenshot_20220520-133655 (1)](https://user-images.githubusercontent.com/5662539/169532140-93c8ef0f-a12f-44f9-bac6-2386ad6cf17d.jpg)
+ <img src="https://user-images.githubusercontent.com/5662539/169532140-93c8ef0f-a12f-44f9-bac6-2386ad6cf17d.jpg" width=256 height=1281>
 
 Vue tablette: 
 ![screenshot-domo gautier-ragueneau info-2022 05 20-14_55_03](https://user-images.githubusercontent.com/5662539/169532399-65c79855-e97e-4680-8879-44c99b408698.png)
