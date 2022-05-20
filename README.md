@@ -31,6 +31,7 @@ C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imp
 - Zigbee
   - Xiaomi
   - Philips Hue
+  - Sonoff
   - Osram
   - Ikea Tradfri 
 
@@ -47,7 +48,7 @@ C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imp
 
 
 # Screenshots
-
+Vue ordinateur:
 <table>
   <tr>
     <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/home.png" width=265 height=530></td>
@@ -62,6 +63,12 @@ C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imp
     <td><img src="https://github.com/gogui63/HomeAssistant/blob/main/screenshots/divers2.png" width=265 height=530></td>
   </tr>
  </table>
+ 
+ Vue mobile: 
+ ![Screenshot_20220520-133655 (1)](https://user-images.githubusercontent.com/5662539/169532140-93c8ef0f-a12f-44f9-bac6-2386ad6cf17d.jpg)
+
+Vue tablette: 
+![screenshot-domo gautier-ragueneau info-2022 05 20-14_55_03](https://user-images.githubusercontent.com/5662539/169532399-65c79855-e97e-4680-8879-44c99b408698.png)
 
 
 [Toutes mes screenshots](https://github.com/gogui63/HomeAssistant/blob/main/screenshots/)
