@@ -13,9 +13,12 @@ La majorité des intéractions se font via les assistants vocaux (Google Nest / 
 La consultation / interaction se fait également via une tablette murale (Température / Humidité / Alerte / Alarme / Clim / chauffage)
 
 
-Coté **réseau** le tout est drivé (en attandant de migrer sous Unifi / Ubiquiti) par un routeur Asus sous OpenWRT (AsusWRT).
+Coté **réseau** : 
+ - UDM Pro
+ - Borne Wifi 6 (U6 Lite)
+ - Switch unifi
 
-J'ai également un **NAS Synology** qui me sert entre autre de reverse proxy. 
+J'ai également un **NAS Synology** qui me sert entre autre de reverse proxy + docker + vm de test. 
 
 C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imprimante 3D, plex, stockage, home assistant, ...)
 
@@ -44,6 +47,7 @@ C'est lui qui me permet d'accèder à mes équipements depuis l'éxtérieur (imp
   - Netatmo 
   - Spotify
   - Waze / Google Travel
+  - Cameras
 
 
 
