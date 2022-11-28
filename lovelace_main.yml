@@ -1,0 +1,3975 @@
+title: Maison
+views:
+  - title: Main
+    path: main
+    icon: mdi:home-assistant
+    badges: []
+    cards:
+      - cards:
+          - color_type: blank-card
+            icon: mdi:led-strip-variant
+            styles:
+              card:
+                - width: 5px
+            type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - content: "# {{\_states(\"sensor.full_time\") }}\n## {{\_states(\"sensor.full_date\") }}\n### {{\_states(\"sensor.ephemeride\") }}\n"
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                      text-align: center
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 55px;
+                        font-style: bold;
+                        text-align: center;
+                        font-weight: bolder;
+                        letter-spacing: '-0.01em';
+                      }
+                      h2 {
+                        font-size: 35px;
+                        font-style: bold;
+                        text-align: center;
+                        font-weight: lighter;
+                        letter-spacing: '-0.01em';
+                      }
+                      h3 {
+                        font-size: 20px;
+                        font-weight: lighter;
+                        font-style: italic;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+          - type: markdown
+            content: |
+              # Météo
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 30px;
+                    font-style: bold;
+                    text-align: center;
+                    font-weight: bolder;
+                    letter-spacing: '-0.01em';
+                  }
+                  h2 {
+                    font-size: 25px;
+                    font-style: bold;
+                    #text-align: center;
+                    font-weight: lighter;
+                    letter-spacing: '-0.01em';
+                  }
+                  h3 {
+                    font-size: 20px;
+                    font-weight: lighter;
+                    font-style: italic;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+          - type: custom:weather-card
+            entity: weather.riom
+            number_of_forecasts: '5'
+            current: true
+            details: true
+            forecast: false
+            hourly_forecast: false
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+          - color_type: blank-card
+            icon: mdi:led-strip-variant
+            styles:
+              card:
+                - width: 5px
+            type: custom:button-card
+          - type: markdown
+            content: >
+              # Information du jour
+
+              Nous fêtons les :
+              **{{states.calendar.fetes_des_prenoms.attributes.message }}**
+
+              Coût éléctricité hier : **{{ states('sensor.elec_yesterday_price')
+              }} €**
+
+              {% if states("sensor.pollens_63") != "nul" -%} Pollen :
+              **{{states('sensor.pollens_63')[0]|upper}}{{states('sensor.pollens_63')[1:]}}**
+              {%- endif %} 
+
+
+              {{ states('sensor.savoir_scrape') }}
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 30px;
+                    font-style: bold;
+                    text-align: center;
+                    font-weight: bolder;
+                    letter-spacing: '-0.01em';
+                  }
+                  h2 {
+                    font-size: 25px;
+                    font-style: bold;
+                    #text-align: center;
+                    font-weight: lighter;
+                    letter-spacing: '-0.01em';
+                  }
+                  h3 {
+                    font-size: 20px;
+                    font-weight: lighter;
+                    font-style: italic;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+        type: vertical-stack
+      - cards:
+          - cards:
+              - content: >
+                  # <img width="30" height="30"
+                  src='/local/images/home-icon.png'
+                  style='vertical-align:middle' /> Personne
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: custom:button-card
+                    style: |
+                      ha-card {
+                        border-radius: 20px ;
+                      }
+                    entity: person.gautier
+                    name: Gautier
+                    aspect_ratio: 1/1
+                    show_entity_picture: true
+                    show_icon: false
+                    show_name: false
+                    show_state: false
+                    show_label: true
+                    label: |
+                      [[[
+                          if (states['person.gautier'].state == "home")
+                            return 'Maison';
+                          if (states['person.gautier'].state == "Travail Gautier")
+                            return 'Travail';
+                          return 'Absent';  ]]]
+                    styles:
+                      entity_picture:
+                        - border-radius: 50%
+                        - top: 5%
+                        - left: 5%
+                        - width: 40%
+                        - color: gray
+                        - opacity: 60%
+                      name:
+                        - top: 5%
+                        - left: 8%
+                        - position: absolute
+                        - color: white
+                        - font-size: 85%
+                      state:
+                        - top: 79%
+                        - left: 5%
+                        - position: absolute
+                      label:
+                        - font-size: 130%
+                        - font-weight: bold
+                        - top: 58%
+                        - left: 8%
+                        - position: absolute
+                        - color: |
+                            [[[
+                              if (states['person.gautier'].state == "home")
+                                return 'white';
+                              if (states['person.gautier'].state == "Travail Gautier")
+                                return 'white';
+                              return 'lightgray';
+                            ]]]
+                      card:
+                        - font-size: 100%
+                        - opacity: |
+                            [[[
+                               if (states['person.gautier'].state == "home")
+                                 return '100%';
+                               if (states['person.gautier'].state == "Travail Gautier")
+                                 return '80%';
+                               return '80%';
+                             ]]]
+                        - background-color: |
+                            [[[
+                               if (states['person.gautier'].state == "home")
+                                 return '';
+                               if (states['person.gautier'].state == "Travail Gautier")
+                                 return 'var(--primary-color)';
+                               return 'grey';
+                             ]]]
+                      custom_fields:
+                        person_state:
+                          - font-size: 100%
+                          - top: 75%
+                          - left: 8%
+                          - color: lightgray
+                          - position: absolute
+                        circle:
+                          - top: 10%
+                          - left: 55%
+                          - width: 35%
+                          - position: absolute
+                          - letter-spacing: 0.03vw
+                          - stroke: |
+                              [[[
+                                if (states['sensor.pixel_5_niveau_de_batterie'].state < 20)
+                                  return 'red';
+                               return 'lightgray';
+                              ]]]
+                    extra_styles: |
+                      @keyframes ball-scale {
+                        from {
+                          transform: scale(1);
+                        }
+                        to {
+                          transform: scale(0.90);
+                        }
+                      }
+                      @keyframes ball-scale2 {
+                        from {
+                          transform: scale(1);
+                        }
+                        to {
+                          transform: scale(0.90);
+                        }
+                      }
+                    state:
+                      - value: 'on'
+                        styles:
+                          card:
+                            - box-shadow: ' outset -1px -1px 2px 0px rgb(12, 12, 14) '
+                            - animation: ball-scale 0.2s
+                            - border-width: 1px
+                      - value: 'off'
+                        styles:
+                          card:
+                            - box-shadow: 1px 1px 5px 0px rgb(12, 12, 14)
+                            - animation: ball-scale2 0.2s
+                            - border-width: 1px
+                    custom_fields:
+                      person_state: |
+                        [[[
+                          if (states['sensor.gautier_last_changed'].state == '')
+                            return 'A l\'instant';
+                         return states['sensor.gautier_last_changed'].state;
+                        ]]]
+                      circle: |
+                        [[[ if (entity.state != 'unavailable' ) 
+                        {
+                           ;
+                           const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                           return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                           transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - states['sensor.pixel_5_niveau_de_batterie'].state / 100 * circumference};" />
+                           <text x="50%" y="54%" fill="lightgray" font-size="13" text-anchor="middle" alignment-baseline="middle">${states['sensor.pixel_5_niveau_de_batterie'].state}%<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                  - type: custom:button-card
+                    style: |
+                      ha-card {
+                        border-radius: 20px ;
+                      }
+                    entity: person.manon
+                    name: Manon
+                    aspect_ratio: 1/1
+                    show_entity_picture: true
+                    show_icon: false
+                    show_name: false
+                    show_state: false
+                    show_label: true
+                    label: |
+                      [[[
+                          if (states['person.manon'].state == "home")
+                            return 'Maison';
+                          if (states['person.manon'].state == "Travail Manon")
+                            return 'Travail';
+                          return 'Absent';  ]]]
+                    styles:
+                      entity_picture:
+                        - border-radius: 50%
+                        - top: 5%
+                        - left: 5%
+                        - width: 40%
+                        - color: gray
+                        - opacity: 60%
+                      name:
+                        - top: 5%
+                        - left: 8%
+                        - position: absolute
+                        - color: white
+                        - font-size: 85%
+                      state:
+                        - top: 79%
+                        - left: 5%
+                        - position: absolute
+                      label:
+                        - font-size: 130%
+                        - font-weight: bold
+                        - top: 58%
+                        - left: 8%
+                        - position: absolute
+                        - color: |
+                            [[[
+                              if (states['person.manon'].state == "home")
+                                return 'white';
+                              if (states['person.manon'].state == "Travail Manon")
+                                return 'white';
+                              return 'lightgray';
+                            ]]]
+                      card:
+                        - font-size: 100%
+                        - opacity: |
+                            [[[
+                               if (states['person.manon'].state == "home")
+                                 return '100%';
+                               if (states['person.manon'].state == "Travail Manon")
+                                 return '80%';
+                               return '80%';
+                             ]]]
+                        - background-color: |
+                            [[[
+                               if (states['person.manon'].state == "home")
+                                 return '';
+                               if (states['person.manon'].state == "Travail Manon")
+                                 return 'var(--primary-color)';
+                               return 'grey';
+                             ]]]
+                      custom_fields:
+                        person_state:
+                          - font-size: 100%
+                          - top: 75%
+                          - left: 8%
+                          - color: lightgray
+                          - position: absolute
+                        circle:
+                          - top: 10%
+                          - left: 55%
+                          - width: 35%
+                          - position: absolute
+                          - letter-spacing: 0.03vw
+                          - stroke: |
+                              [[[
+                                if (states['sensor.iphone_de_manon_battery_level'].state < 20)
+                                  return 'red';
+                               return 'lightgray';
+                              ]]]
+                    extra_styles: |
+                      @keyframes ball-scale {
+                        from {
+                          transform: scale(1);
+                        }
+                        to {
+                          transform: scale(0.90);
+                        }
+                      }
+                      @keyframes ball-scale2 {
+                        from {
+                          transform: scale(1);
+                        }
+                        to {
+                          transform: scale(0.90);
+                        }
+                      }
+                    state:
+                      - value: 'on'
+                        styles:
+                          card:
+                            - box-shadow: ' outset -1px -1px 2px 0px rgb(12, 12, 14) '
+                            - animation: ball-scale 0.2s
+                            - border-width: 1px
+                      - value: 'off'
+                        styles:
+                          card:
+                            - box-shadow: 1px 1px 5px 0px rgb(12, 12, 14)
+                            - animation: ball-scale2 0.2s
+                            - border-width: 1px
+                    custom_fields:
+                      person_state: |
+                        [[[
+                          if (states['sensor.manon_last_changed'].state == '')
+                            return 'A l\'instant';
+                         return states['sensor.manon_last_changed'].state;
+                        ]]]
+                      circle: |
+                        [[[ if (entity.state != 'unavailable' ) 
+                        {
+                           ;
+                           const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                           return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                           transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - states['sensor.iphone_de_manon_battery_level'].state / 100 * circumference};" />
+                           <text x="50%" y="54%" fill="lightgray" font-size="13" text-anchor="middle" alignment-baseline="middle">${states['sensor.iphone_de_manon_battery_level'].state}%<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: entities
+                    entities:
+                      - entity: input_boolean.guest_mode
+                        type: custom:multiple-entity-row
+                        name: Mode
+                        show_state: false
+                        icon: mdi:account-group
+                        state_header: main
+                        toggle: true
+                        state_color: true
+                        entities:
+                          - entity: input_boolean.presence
+                            name: Presence
+                            toggle: true
+                          - entity: input_boolean.is_jour
+                            name: Jour
+                            toggle: true
+                          - entity: input_boolean.holidays
+                            name: Vacances
+                            toggle: true
+                          - entity: input_boolean.teletravail
+                            name: Télétravail
+                            toggle: true
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/weather.png'
+                  style='vertical-align:middle' /> Prévisions
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: custom:weather-card
+                    entity: weather.forecast_riom
+                    number_of_forecasts: '5'
+                    current: false
+                    details: false
+                    hourly_forecast: false
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/gasoil.png'
+                  style='vertical-align:middle' /> Essence
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: entities
+                    entities:
+                      - entity: sensor.prixcarburant_carrefour
+                        type: custom:multiple-entity-row
+                        name: Carrefour
+                        show_state: false
+                        icon: mdi:gas-station
+                        entities:
+                          - attribute: E95
+                            name: E95
+                          - attribute: E98
+                            name: E98
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+      - cards:
+          - cards:
+              - cards:
+                  - content: >
+                      # <img width="30" height="30" src='/local/images/info.png'
+                      style='vertical-align:middle' /> Resumé
+                    style:
+                      .: |
+                        ha-card {
+                          background-color: transparent !important;
+                          box-shadow: none !important;
+                        }
+                      ha-markdown:
+                        $: |
+                          h1 {
+                            font-size: 25px;
+                           # font-weight: bold;
+                            text-align: center;
+                            letter-spacing: '-0.01em';
+                          }
+                    type: markdown
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.light_recap
+                        state_not: Toutes les lumières sont éteintes
+                    card:
+                      type: horizontal-stack
+                      cards:
+                        - color_type: blank-card
+                          styles:
+                            card:
+                              - width: 5px
+                          type: custom:button-card
+                        - type: conditional
+                          conditions:
+                            - entity: sensor.light_recap
+                              state_not: 0 lampes sont allumées
+                          card:
+                            type: entities
+                            entities:
+                              - type: custom:auto-entities
+                                name: Lumières
+                                filter:
+                                  include:
+                                    - domain: light
+                                  exclude:
+                                    - state: 'off'
+                                    - state: unavailable
+                                    - attributes:
+                                        is_hue_group: true
+                                    - name: Lights *
+                                show_empty: false
+                                unique: true
+                                card:
+                                  type: custom:fold-entity-row
+                                  head:
+                                    entity: sensor.light_recap
+                                    icon: mdi:lamp
+                                    name: Lumières
+                                  collapse: 4
+                        - color_type: blank-card
+                          styles:
+                            card:
+                              - width: 5px
+                          type: custom:button-card
+                  - type: horizontal-stack
+                    cards:
+                      - color_type: blank-card
+                        styles:
+                          card:
+                            - width: 5px
+                        type: custom:button-card
+                      - type: entities
+                        entities:
+                          - entity: sensor.porte_last_changed
+                            name: Porte d'entrée
+                            icon: mdi:door-open
+                      - color_type: blank-card
+                        styles:
+                          card:
+                            - width: 5px
+                        type: custom:button-card
+                type: vertical-stack
+            type: vertical-stack
+        type: vertical-stack
+  - icon: mdi:lightbulb-on
+    path: lumiere
+    title: Lumière
+    badges: []
+    cards:
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/cover.png'
+              style='vertical-align:middle' /> Volets 
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:slider-button-card
+                entity: cover.salon_1
+                slider:
+                  direction: top-bottom
+                  background: striped
+                icon:
+                  show: true
+                  tap_action:
+                    action: more-info
+                  icon: ''
+                  use_state_color: false
+                action_button:
+                  tap_action:
+                    action: toggle
+                  mode: custom
+                  icon: mdi:swap-vertical
+                compact: false
+                show_state: false
+              - type: custom:slider-button-card
+                entity: cover.salon_2
+                slider:
+                  direction: top-bottom
+                  background: striped
+                icon:
+                  show: true
+                  tap_action:
+                    action: more-info
+                  icon: ''
+                  use_state_color: false
+                action_button:
+                  tap_action:
+                    action: toggle
+                  mode: custom
+                  icon: mdi:swap-vertical
+                compact: false
+                show_state: false
+              - type: custom:slider-button-card
+                entity: cover.cuisine
+                slider:
+                  direction: top-bottom
+                  background: striped
+                icon:
+                  show: true
+                  tap_action:
+                    action: more-info
+                  icon: ''
+                  use_state_color: false
+                action_button:
+                  tap_action:
+                    action: toggle
+                  mode: custom
+                  icon: mdi:swap-vertical
+                compact: false
+                show_state: false
+              - type: custom:slider-button-card
+                entity: cover.bureau
+                slider:
+                  direction: top-bottom
+                  background: striped
+                icon:
+                  show: true
+                  tap_action:
+                    action: more-info
+                  icon: ''
+                  use_state_color: false
+                action_button:
+                  tap_action:
+                    action: toggle
+                  mode: custom
+                  icon: mdi:swap-vertical
+                compact: false
+                show_state: false
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/light.png'
+                  style='vertical-align:middle' /> Lumières
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: custom:slider-button-card
+                    entity: light.lights_salon
+                    name: Salon
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: mdi:sofa
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - type: custom:slider-button-card
+                    entity: light.lights_chambre
+                    name: Chambre
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: mdi:bed-double
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - type: custom:slider-button-card
+                    entity: light.lights_chambre_agathe
+                    name: Agathe
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: mdi:baby-face
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: custom:slider-button-card
+                    entity: light.lights_cuisine
+                    name: Cuisine
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: mdi:fridge
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - type: custom:slider-button-card
+                    entity: light.lights_entree
+                    name: Entrée
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: hue:go
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - type: custom:slider-button-card
+                    entity: light.lights_escalier
+                    name: Escalier
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: mdi:stairs
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+          - cards:
+              - content: >
+                  # <img width="30" height="30"
+                  src='/local/images/light_routine.png'
+                  style='vertical-align:middle' /> Routines
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: custom:slider-button-card
+                    entity: light.lumiere_indirecte
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: hue:wall-spot
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                      icon: ''
+                    name: Indirecte
+                  - type: custom:slider-button-card
+                    entity: light.wled_group
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: ''
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - type: custom:slider-button-card
+                    entity: light.hue_plays_group
+                    slider:
+                      direction: left-right
+                      background: gradient
+                      use_state_color: true
+                    icon:
+                      icon: hue:play-bar
+                    action_button:
+                      mode: custom
+                      show: true
+                      tap_action:
+                        action: toggle
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+  - theme: Backend-selected
+    icon: mdi:thermometer
+    badges: []
+    cards:
+      - cards:
+          - content: |
+              # Intérieur 
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:button-card
+                entity: sensor.netatmo_maison_salon_temperature
+                name: Salon
+                icon: hue:room-living
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: false
+                show_label: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
+                    - grid-template-columns: 1fr
+                    - grid-template-rows: 20% 40% 35% 5%
+                  icon:
+                    - margin-left: '-50%'
+                    - align-self: middle
+                    - width: 100%
+                    - justify-self: middle
+                  name:
+                    - font-size: 130%
+                    - align-self: middle
+                    - justify-self: end
+                    - margin-right: 10%
+                    - color: lightgray
+                  state:
+                    - font-size: 160%
+                    - justify-self: end
+                    - margin-top: 10%
+                    - margin-bottom: 0px
+                    - align-self: middle
+                  label:
+                    - font-weight: bold
+                    - font-size: 80%
+                  card:
+                    - font-size: 110%
+                  custom_fields:
+                    graph:
+                      - align-self: middle
+                      - justify-self: middle
+                      - margin-top: '-15%'
+                      - '--paper-card-background-color': rgba(0, 0, 0, 0)
+                      - '--ha-card-background': rgba(0, 0, 0, 0)"
+                      - '--ha-card-box-shadow': none
+                      - pointer-events: none
+                    min:
+                      - align-self: end
+                      - justify-self: start
+                      - font-size: 80%
+                      - margin-left: 5%
+                      - color: lightgray
+                    max:
+                      - align-self: end
+                      - justify-self: end
+                      - margin-right: 10%
+                      - font-size: 80%
+                      - color: lightgray
+                    state:
+                      - justify-self: middle
+                      - margin-top: 10%
+                      - margin-bottom: 0px
+                      - align-self: middle
+                custom_fields:
+                  graph:
+                    card:
+                      type: custom:mini-graph-card
+                      entities:
+                        - sensor.netatmo_maison_salon_temperature
+                      height: 150
+                      line_width: 10
+                      lower_bound: 18
+                      points_per_hour: 1
+                      hours_to_show: 24
+                      show:
+                        fill: fade
+                        icon: false
+                        name: false
+                        state: false
+                        legend: false
+                        points: false
+                        labels: false
+                  min: |
+                    [[[
+                      return `<span>${states['input_number.statistics_salon_temperature_min'].state}°C</span>`
+                    ]]]
+                  max: |
+                    [[[
+                      return `<span>${states['input_number.statistics_salon_temperature_max'].state}°C</span>`
+                    ]]]
+                  state: |
+                    [[[
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                    ]]]
+              - type: custom:button-card
+                entity: sensor.netatmo_maison_salon_bureau_temperature
+                name: Bureau
+                icon: mdi:desk
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: false
+                show_label: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
+                    - grid-template-columns: 1fr
+                    - grid-template-rows: 20% 40% 35% 5%
+                  icon:
+                    - margin-left: '-50%'
+                    - align-self: middle
+                    - width: 100%
+                    - justify-self: middle
+                  name:
+                    - font-size: 130%
+                    - align-self: middle
+                    - justify-self: end
+                    - margin-right: 10%
+                    - color: lightgray
+                  state:
+                    - font-size: 160%
+                    - justify-self: end
+                    - margin-top: 10%
+                    - margin-bottom: 0px
+                    - align-self: middle
+                  label:
+                    - font-weight: bold
+                    - font-size: 80%
+                  card:
+                    - font-size: 110%
+                  custom_fields:
+                    graph:
+                      - align-self: middle
+                      - justify-self: middle
+                      - margin-top: '-15%'
+                      - '--paper-card-background-color': rgba(0, 0, 0, 0)
+                      - '--ha-card-background': rgba(0, 0, 0, 0)"
+                      - '--ha-card-box-shadow': none
+                      - pointer-events: none
+                    min:
+                      - align-self: end
+                      - justify-self: start
+                      - font-size: 80%
+                      - margin-left: 5%
+                      - color: lightgray
+                    max:
+                      - align-self: end
+                      - justify-self: end
+                      - margin-right: 10%
+                      - font-size: 80%
+                      - color: lightgray
+                    state:
+                      - justify-self: middle
+                      - margin-top: 10%
+                      - margin-bottom: 0px
+                      - align-self: middle
+                custom_fields:
+                  graph:
+                    card:
+                      type: custom:mini-graph-card
+                      entities:
+                        - sensor.netatmo_maison_salon_bureau_temperature
+                      height: 150
+                      line_width: 10
+                      lower_bound: 18
+                      points_per_hour: 1
+                      hours_to_show: 24
+                      show:
+                        fill: fade
+                        icon: false
+                        name: false
+                        state: false
+                        legend: false
+                        points: false
+                        labels: false
+                  min: |
+                    [[[
+                      return `<span>${states['input_number.statistics_bureau_temperature_min'].state}°C</span>`
+                    ]]]
+                  max: |
+                    [[[
+                      return `<span>${states['input_number.statistics_bureau_temperature_max'].state}°C</span>`
+                    ]]]
+                  state: |
+                    [[[
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_bureau_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                    ]]]
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:button-card
+                entity: sensor.netatmo_maison_salon_chambre_temperature
+                name: Chambre
+                icon: hue:room-bedroom
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: false
+                show_label: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
+                    - grid-template-columns: 1fr
+                    - grid-template-rows: 20% 40% 35% 5%
+                  icon:
+                    - margin-left: '-30%'
+                    - align-self: middle
+                    - width: 100%
+                    - justify-self: middle
+                  name:
+                    - font-size: 130%
+                    - align-self: middle
+                    - justify-self: end
+                    - margin-right: 10%
+                    - color: lightgray
+                  state:
+                    - font-size: 160%
+                    - justify-self: end
+                    - margin-top: 10%
+                    - margin-bottom: 0px
+                    - align-self: middle
+                  label:
+                    - font-weight: bold
+                    - font-size: 80%
+                  card:
+                    - font-size: 110%
+                  custom_fields:
+                    graph:
+                      - align-self: middle
+                      - justify-self: middle
+                      - margin-top: '-15%'
+                      - '--paper-card-background-color': rgba(0, 0, 0, 0)
+                      - '--ha-card-background': rgba(0, 0, 0, 0)"
+                      - '--ha-card-box-shadow': none
+                      - pointer-events: none
+                    min:
+                      - align-self: end
+                      - justify-self: start
+                      - font-size: 80%
+                      - margin-left: 5%
+                      - color: lightgray
+                    max:
+                      - align-self: end
+                      - justify-self: end
+                      - margin-right: 10%
+                      - font-size: 80%
+                      - color: lightgray
+                    state:
+                      - justify-self: middle
+                      - margin-top: 10%
+                      - margin-bottom: 0px
+                      - align-self: middle
+                custom_fields:
+                  graph:
+                    card:
+                      type: custom:mini-graph-card
+                      entities:
+                        - sensor.netatmo_maison_salon_chambre_temperature
+                      height: 150
+                      line_width: 10
+                      lower_bound: 18
+                      points_per_hour: 1
+                      hours_to_show: 24
+                      show:
+                        fill: fade
+                        icon: false
+                        name: false
+                        state: false
+                        legend: false
+                        points: false
+                        labels: false
+                  min: |
+                    [[[
+                      return `<span>${states['input_number.statistics_chambre_temperature_min'].state}°C</span>`
+                    ]]]
+                  max: |
+                    [[[
+                      return `<span>${states['input_number.statistics_chambre_temperature_max'].state}°C</span>`
+                    ]]]
+                  state: |
+                    [[[
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_chambre_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                    ]]]
+              - type: custom:button-card
+                entity: sensor.netatmo_maison_salon_agathe_temperature
+                name: Agathe
+                icon: hue:room-kids
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: false
+                show_label: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
+                    - grid-template-columns: 1fr
+                    - grid-template-rows: 20% 40% 35% 5%
+                  icon:
+                    - margin-left: '-50%'
+                    - align-self: middle
+                    - width: 100%
+                    - justify-self: middle
+                  name:
+                    - font-size: 130%
+                    - align-self: middle
+                    - justify-self: end
+                    - margin-right: 10%
+                    - color: lightgray
+                  state:
+                    - font-size: 160%
+                    - justify-self: end
+                    - margin-top: 10%
+                    - margin-bottom: 0px
+                    - align-self: middle
+                  label:
+                    - font-weight: bold
+                    - font-size: 80%
+                  card:
+                    - font-size: 110%
+                  custom_fields:
+                    graph:
+                      - align-self: middle
+                      - justify-self: middle
+                      - margin-top: '-15%'
+                      - '--paper-card-background-color': rgba(0, 0, 0, 0)
+                      - '--ha-card-background': rgba(0, 0, 0, 0)"
+                      - '--ha-card-box-shadow': none
+                      - pointer-events: none
+                    min:
+                      - align-self: end
+                      - justify-self: start
+                      - font-size: 80%
+                      - margin-left: 5%
+                      - color: lightgray
+                    max:
+                      - align-self: end
+                      - justify-self: end
+                      - margin-right: 10%
+                      - font-size: 80%
+                      - color: lightgray
+                    state:
+                      - justify-self: middle
+                      - margin-top: 10%
+                      - margin-bottom: 0px
+                      - align-self: middle
+                custom_fields:
+                  graph:
+                    card:
+                      type: custom:mini-graph-card
+                      entities:
+                        - sensor.netatmo_maison_salon_agathe_temperature
+                      height: 150
+                      line_width: 10
+                      lower_bound: 18
+                      points_per_hour: 1
+                      hours_to_show: 24
+                      show:
+                        fill: fade
+                        icon: false
+                        name: false
+                        state: false
+                        legend: false
+                        points: false
+                        labels: false
+                  min: |
+                    [[[
+                      return `<span>${states['input_number.statistics_agathe_temperature_min'].state}°C</span>`
+                    ]]]
+                  max: |
+                    [[[
+                      return `<span>${states['input_number.statistics_agathe_temperature_max'].state}°C</span>`
+                    ]]]
+                  state: |
+                    [[[
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_agathe_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                    ]]]
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: |
+              # Climatisation / Chauffage 
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: thermostat
+                entity: climate.rdc
+                name: Salon
+              - type: thermostat
+                entity: climate.etage
+                name: Chambre
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: entities
+                entities:
+                  - entity: sensor.temperature_ble_salon
+                    name: Température actuelle
+                    secondary_info: last-updated
+                  - entity: input_number.clim_chauffage_consigne_temp
+                    name: Consigne
+                  - entity: input_number.clim_chauffage_consigne_max
+                    name: Maximum
+                  - entity: input_number.clim_chauffage_consigne_min
+                    name: Minumum
+                  - entity: >-
+                      automation.temperature_gestion_clim_chauffage_auto_dupliquer
+                    icon: mdi:thermostat
+                    name: Gestion auto
+                    secondary_info: last-triggered
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: |
+              # Extérieur
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_exterieur_temperature
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-outdoors
+                name: Extérieur
+                show:
+                  fill: false
+                  legend: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_pluviometre_rain_today
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:weather-pouring
+                name: Pluie
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_anemometre_wind_strength
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:weather-windy
+                name: Vent
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: |
+              # Humidité
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-living
+                name: Salon
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_exterieur_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-outdoors
+                name: Extérieur
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_chambre_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:bed-double
+                name: Chambre
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_agathe_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-kids
+                name: Agathe
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+  - icon: mdi:shield-home
+    title: Alarm
+    path: alarm
+    badges: []
+    cards:
+      - cards:
+          - type: markdown
+            content: >
+              # <img width="30" height="30" src='/local/images/info.png'
+              style='vertical-align:middle' /> Récapitulatif
+
+              {% if is_state("sensor.since_last_motion", "0") -%}  Il y'a du
+              mouvement {%- else -%}  Dernier mouvement il y'a **{{
+              states('sensor.since_last_motion') }} minutes** {%- endif %}
+
+              {{ states('sensor.fenetre_recap') }}
+
+              {% if is_state("binary_sensor.porte_entree_contact", "on") -%} 
+              Porte ouverte depuis **{{ states('sensor.porte_last_changed') }}**
+              {%- else -%}  Porte fermée depuis **{{
+              states('sensor.porte_last_changed') }}** {%- endif %}
+
+              {% if is_state("person.gautier", "home") -%} Gautier est à la
+              maison depuis **{{ states('sensor.gautier_last_changed') }}** {%-
+              else -%}  Gautier est sorti depuis **{{
+              states('sensor.gautier_last_changed') }}** {%- endif %}
+
+              {% if is_state("person.manon", "home") -%}  Manon est à la maison
+              depuis **{{ states('sensor.manon_last_changed') }}** {%- else -%} 
+              Manon est sorti depuis **{{ states('sensor.manon_last_changed')
+              }}** {%- endif %}
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                  text-align: center;
+                  font-size: 17px;
+                }
+              ha-markdown:
+                $: |
+                  h2 {
+                    font-size: 10px;
+                    font-weight: lighter;
+                    font-style: italic;
+                    text-align: center;
+                    #letter-spacing: '-0.01em';
+                  }
+                  h1 {
+                    font-size: 30px;
+                    font-style: bold;
+                    text-align: center;
+                    font-weight: bolder;
+                    letter-spacing: '-0.01em';
+                  }
+          - cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - content: >
+                  # <img width="30" height="30" src='/local/images/cameras.png'
+                  style='vertical-align:middle' /> Cameras 
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+            type: horizontal-stack
+          - type: vertical-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - show_name: false
+                    show_state: false
+                    type: picture-entity
+                    camera_image: camera.salon_sd
+                    camera_view: live
+                    aspect_ratio: 48%
+                    entity: camera.salon_hd
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - show_state: false
+                    show_name: false
+                    camera_view: live
+                    type: picture-entity
+                    camera_image: camera.chambre_agathe_sd
+                    aspect_ratio: 48%
+                    entity: camera.chambre_agathe_hd
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entity: camera.netatmo_welcom
+                    show_name: false
+                    show_state: false
+                    type: picture-entity
+                    camera_view: live
+                    aspect_ratio: 48%
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entity: camera.nesthub
+                    show_name: false
+                    show_state: false
+                    type: picture-entity
+                    camera_image: camera.nesthub
+                    camera_view: live
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - content: >
+                  # <img width="30" height="30" src='/local/images/alarm.png'
+                  style='vertical-align:middle' /> Alarme 
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+            type: horizontal-stack
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: alarm-panel
+                states:
+                  - arm_home
+                  - arm_away
+                entity: alarm_control_panel.ha_alarm
+                name: ' '
+              - type: glance
+                entities:
+                  - entity: device_tracker.nut_gautier
+                    name: Gautier
+                  - entity: device_tracker.nut_manon
+                    name: Manon
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/motion.png'
+                  style='vertical-align:middle' /> Mouvements
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: entities
+                    entities:
+                      - entity: switch.alarme_current_value
+                        name: Declencher alarme
+                        icon: mdi:alarm-light
+                    show_state: true
+                    state_color: false
+                    style: |
+                      ha-card {
+                        word-wrap: normal
+                      }
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: binary_sensor.motion_entree_occupancy
+                        name: Entrée
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: binary_sensor.motion_escalier_bas_occupancy
+                        name: Escalier Bas
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: binary_sensor.motion_escalier_haut_occupancy
+                        name: Escalier Haut
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: binary_sensor.motion_sdb_haut_occupancy
+                        name: SDB Étage
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: binary_sensor.motion_sdb_bas_occupancy
+                        name: SDB RdC
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: binary_sensor.motion_cuisine_occupancy
+                        name: Cuisine
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - content: >
+                  # <img width="30" height="30" src='/local/images/windows.png'
+                  style='vertical-align:middle' /> Fenêtres
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: binary_sensor.porte_entree_contact
+                        name: Entrée
+                      - entity: binary_sensor.porte_terrasse_contact
+                        name: Terasse
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+  - icon: mdi:flash
+    badges: []
+    cards:
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/pylon.png'
+              style='vertical-align:middle' /> Éléctricité
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:button-card
+                style: |
+                  ha-card {
+                    border-radius: 20px ;
+                  }
+                entity: sensor.consommation_day
+                name: Jour
+                icon: mdi:transmission-tower
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: true
+                show_label: true
+                label: ''
+                styles:
+                  icon:
+                    - top: '-21%'
+                    - left: '-27%'
+                    - width: 35%
+                    - position: relative
+                    - color: white
+                  name:
+                    - top: 65%
+                    - left: 12%
+                    - position: absolute
+                    - font-weight: bold
+                    - color: white
+                    - font-size: 180%
+                  state:
+                    - top: 80%
+                    - left: 12%
+                    - position: absolute
+                    - font-size: 100%
+                  label:
+                    - top: 74%
+                    - left: 10%
+                    - position: absolute
+                    - font-weight: bold
+                    - font-size: 100%
+                  card:
+                    - font-size: 100%
+                    - border-color: rgba(152, 167, 185, 0.2)
+                    - background-color: ''
+                  custom_fields:
+                    circle:
+                      - top: 10%
+                      - left: 55%
+                      - width: 40%
+                      - position: absolute
+                      - letter-spacing: 0.03vw
+                      - stroke: |
+                          [[[
+                            if (states['sensor.elec_current_price'].state > 4)
+                              return 'red';
+                            if (states['sensor.elec_current_price'].state > 3)
+                              return 'orange';
+                           return 'green';
+                          ]]]
+                extra_styles: |
+                  @keyframes ball-scale {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                  @keyframes ball-scale2 {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                custom_fields:
+                  circle: |
+                    [[[ if (entity.state != 'unavailable' ) 
+                    {
+                       ;
+                       const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                       return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                       transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                       <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_current_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                tap_action:
+                  action: more-info
+              - type: custom:button-card
+                style: |
+                  ha-card {
+                    border-radius: 20px ;
+                  }
+                entity: sensor.consommation_yesterday
+                name: Hier
+                icon: mdi:lightning-bolt
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: true
+                show_label: false
+                label: Hier
+                styles:
+                  icon:
+                    - top: '-21%'
+                    - left: '-27%'
+                    - width: 35%
+                    - position: relative
+                    - color: white
+                  name:
+                    - top: 65%
+                    - left: 12%
+                    - position: absolute
+                    - font-weight: bold
+                    - color: white
+                    - font-size: 180%
+                  state:
+                    - top: 80%
+                    - left: 12%
+                    - position: absolute
+                    - font-size: 100%
+                  label:
+                    - top: 74%
+                    - left: 10%
+                    - position: absolute
+                    - font-weight: bold
+                    - font-size: 100%
+                  card:
+                    - font-size: 100%
+                    - border-color: rgba(152, 167, 185, 0.2)
+                    - background-color: ''
+                  custom_fields:
+                    circle:
+                      - top: 10%
+                      - left: 55%
+                      - width: 40%
+                      - position: absolute
+                      - letter-spacing: 0.03vw
+                      - stroke: |
+                          [[[
+                            if (states['sensor.elec_yesterday_price'].state > 4)
+                              return 'red';
+                            if (states['sensor.elec_yesterday_price'].state > 3)
+                              return 'orange';
+                           return 'green';
+                          ]]]
+                extra_styles: |
+                  @keyframes ball-scale {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                  @keyframes ball-scale2 {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                custom_fields:
+                  circle: |
+                    [[[ if (entity.state != 'unavailable' ) 
+                    {
+                       ;
+                       const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                       return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                       transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                       <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_yesterday_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                tap_action:
+                  action: more-info
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:button-card
+                style: |
+                  ha-card {
+                    border-radius: 20px ;
+                  }
+                entity: sensor.consommation_month
+                name: Mois
+                icon: mdi:flash-outline
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: true
+                show_label: true
+                label: ''
+                styles:
+                  icon:
+                    - top: '-21%'
+                    - left: '-27%'
+                    - width: 35%
+                    - position: relative
+                    - color: white
+                  name:
+                    - top: 65%
+                    - left: 12%
+                    - position: absolute
+                    - font-weight: bold
+                    - color: white
+                    - font-size: 180%
+                  state:
+                    - top: 80%
+                    - left: 12%
+                    - position: absolute
+                    - font-size: 100%
+                  label:
+                    - top: 74%
+                    - left: 10%
+                    - position: absolute
+                    - font-weight: bold
+                    - font-size: 100%
+                  card:
+                    - font-size: 100%
+                    - border-color: rgba(152, 167, 185, 0.2)
+                    - background-color: ''
+                  custom_fields:
+                    circle:
+                      - top: 10%
+                      - left: 55%
+                      - width: 40%
+                      - position: absolute
+                      - letter-spacing: 0.03vw
+                      - stroke: |
+                          [[[
+                            if (states['sensor.elec_current_month_price'].state > 100)
+                              return 'white';
+                            if (states['sensor.elec_current_month_price'].state > 3)
+                              return 'white';
+                           return 'white';
+                          ]]]
+                extra_styles: |
+                  @keyframes ball-scale {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                  @keyframes ball-scale2 {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                custom_fields:
+                  circle: |
+                    [[[ if (entity.state != 'unavailable' ) 
+                    {
+                       ;
+                       const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                       return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                       transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                       <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_current_month_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                tap_action:
+                  action: more-info
+              - type: custom:button-card
+                style: |
+                  ha-card {
+                    border-radius: 20px ;
+                  }
+                entity: sensor.consommation_year
+                name: Année
+                icon: mdi:home-lightning-bolt-outline
+                aspect_ratio: 1/1
+                show_icon: true
+                show_name: true
+                show_state: true
+                show_label: false
+                label: Année
+                styles:
+                  icon:
+                    - top: '-21%'
+                    - left: '-27%'
+                    - width: 35%
+                    - position: relative
+                    - color: white
+                  name:
+                    - top: 65%
+                    - left: 12%
+                    - position: absolute
+                    - font-weight: bold
+                    - color: white
+                    - font-size: 180%
+                  state:
+                    - top: 80%
+                    - left: 12%
+                    - position: absolute
+                    - font-size: 100%
+                  label:
+                    - top: 85%
+                    - left: 10%
+                    - position: absolute
+                    - font-weight: bold
+                    - font-size: 100%
+                  card:
+                    - font-size: 100%
+                    - border-color: rgba(152, 167, 185, 0.2)
+                    - background-color: ''
+                  custom_fields:
+                    circle:
+                      - top: 10%
+                      - left: 55%
+                      - width: 40%
+                      - position: absolute
+                      - letter-spacing: 0.03vw
+                      - stroke: |
+                          [[[
+                            if (states['sensor.elec_current_year_price'].state > 4)
+                              return 'white';
+                            if (states['sensor.elec_current_year_price'].state > 3)
+                              return 'white';
+                           return 'white';
+                          ]]]
+                extra_styles: |
+                  @keyframes ball-scale {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                  @keyframes ball-scale2 {
+                    from {
+                      transform: scale(1);
+                    }
+                    to {
+                      transform: scale(0.90);
+                    }
+                  }
+                custom_fields:
+                  circle: |
+                    [[[ if (entity.state != 'unavailable' ) 
+                    {
+                       ;
+                       const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                       return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                       transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                       <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_current_year_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+                tap_action:
+                  action: more-info
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/stats.png'
+              style='vertical-align:middle' /> Graphiques
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:apexcharts-card
+                experimental:
+                  color_threshold: true
+                graph_span: 24h
+                header:
+                  show: true
+                  title: Consomation en kWh par heure
+                series:
+                  - entity: sensor.consommation_hour
+                    type: area
+                    name: Conso heure
+                    curve: smooth
+                    stroke_width: 0
+                    group_by:
+                      func: max
+                      duration: 1h
+                    color_threshold:
+                      - value: 0
+                        color: 45a4f7
+                      - value: 1
+                        color: 0c60fa
+                      - value: 2
+                        color: orange
+                      - value: 3
+                        color: red
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:apexcharts-card
+                experimental:
+                  color_threshold: true
+                graph_span: 7d
+                header:
+                  show: true
+                  title: Consomation en kWh semaine
+                series:
+                  - entity: sensor.consommation_day
+                    type: area
+                    name: Conso du jour
+                    group_by:
+                      func: delta
+                      duration: 1d
+                    stroke_width: 0
+                    float_precision: 0.1
+                    color_threshold:
+                      - value: 0
+                        color: 45a4f7
+                      - value: 23
+                        color: 0c60fa
+                      - value: 30
+                        color: orange
+                      - value: 37
+                        color: red
+                  - entity: sensor.netatmo_maison_salon_exterieur_temperature
+                    name: Température
+                    group_by:
+                      func: avg
+                      duration: 1d
+                    stroke_width: 3
+                    color: white
+                    float_precision: 0.1
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+  - icon: mdi:cogs
+    path: system
+    badges: []
+    cards:
+      - cards:
+          - cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - content: >
+                  # <img width="30" height="30" src='/local/images/mode2.png'
+                  style='vertical-align:middle' /> Mode 
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+            type: horizontal-stack
+          - type: vertical-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: entities
+                    entities:
+                      - entity: input_boolean.is_jour
+                      - entity: input_boolean.presence
+                      - entity: input_boolean.sieste_agathe
+                      - entity: input_boolean.guest_mode
+                        icon: mdi:account-group
+                      - entity: input_boolean.holidays
+                        icon: mdi:beach
+                    show_icon: mdi:lamp
+                    show_state: true
+                    state_color: false
+                    style: |
+                      ha-card {
+                        word-wrap: normal
+                      }
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+          - content: >
+              # <img width="30" height="30" src='/local/images/battery.png'
+              style='vertical-align:middle' /> Batteries 
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - collapse: 4
+                entities:
+                  - sensor.alarme_battery_level
+                  - sensor.iphone_de_manon_battery_level
+                  - sensor.mitemp_chambre_battery
+                  - sensor.mitemp_salon_battery
+                  - sensor.mitemp_cuisine_battery
+                  - sensor.netatmo_maison_salon_agathe_battery_percent
+                  - sensor.netatmo_maison_salon_chambre_battery_percent
+                  - sensor.netatmo_maison_salon_anemometre_battery_percent
+                  - sensor.netatmo_maison_salon_exterieur_battery_percent
+                  - sensor.netatmo_maison_salon_pluviometre_battery_percent
+                  - sensor.pixel_5_niveau_de_batterie
+                sort_by_level: asc
+                title: false
+                type: custom:battery-state-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/adguard.png'
+                  style='vertical-align:middle' /> AdGuard
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: entities
+                    entities:
+                      - entity: switch.adguard_protection
+                    show_icon: mdi:lamp
+                    show_state: true
+                    state_color: false
+                    style: |
+                      ha-card {
+                        word-wrap: normal
+                      }
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: sensor.adguard_dns_queries
+                        name: Requêtes
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.adguard_dns_queries_blocked_ratio
+                        name: Bloquées
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.adguard_average_processing_speed
+                        name: Vitesse
+                    show_header_toggle: false
+                    show_state: true
+                    show_name: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+      - cards:
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/vaccum.png'
+                  style='vertical-align:middle' /> Aspirateur
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: sensor.vacuum_fan_speed
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.xiaomi_vacuum_cleaner_last_clean_area
+                        name: Surface
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.vacuum_total_cleaning_time
+                        name: Temps
+                        icon: mdi:timer-sand
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - type: custom:fold-entity-row
+                        head: vacuum.xiaomi_vacuum_cleaner
+                        entities:
+                          - sensor.xiaomi_vacuum_cleaner_filter_left
+                          - sensor.xiaomi_vacuum_cleaner_main_brush_left
+                          - sensor.xiaomi_vacuum_cleaner_side_brush_left
+                          - sensor.xiaomi_vacuum_cleaner_sensor_dirty_left
+                    type: entities
+                    state_color: false
+                    show_header_toggle: true
+                    show_icon: false
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/printer.png'
+                  style='vertical-align:middle' /> Imprimante 3D
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: sensor.spaghetti_bedtemp
+                        name: Bed
+                        icon: mdi:tray
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.spaghetti_current_progress
+                        name: Progression
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: sensor.spaghetti_nozzletemp
+                        name: Hot End
+                        icon: mdi:printer-3d-nozzle
+                    show_header_toggle: false
+                    show_state: true
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - type: custom:fold-entity-row
+                        head: switch.prise_imprimante
+                        entities:
+                          - sensor.spaghetti_print_time
+                          - sensor.spaghetti_current_print
+                          - sensor.spaghetti_time_remaining
+                          - null
+                    type: entities
+                    state_color: false
+                    show_header_toggle: true
+                    show_icon: false
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+          - content: >
+              # <img width="30" height="30" src='/local/images/cast.png'
+              style='vertical-align:middle' /> Cast
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entity: media_player.nesthub
+                type: media-control
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entity: media_player.chambre
+                type: media-control
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entity: media_player.agathe
+                type: media-control
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entity: media_player.sdb
+                type: media-control
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/ha.png'
+              style='vertical-align:middle' /> Home Assistant 
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entities:
+                  - entity: sensor.latest_version
+                    name: Version
+                show_icon: true
+                show_name: true
+                show_state: true
+                title: false
+                type: glance
+              - entities:
+                  - entity: sensor.last_successful_authentication
+                    name: Last Login
+                show_icon: true
+                show_name: true
+                show_state: true
+                title: false
+                type: glance
+              - columns: null
+                entities:
+                  - entity: sensor.supervisor_updates
+                    icon: mdi:download-network
+                    name: Updates
+                show_icon: true
+                show_name: true
+                show_state: true
+                title: false
+                type: glance
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.processor_use
+                font_size: 75
+                icon: mdi:chip
+                name: CPU
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.memory_use_percent
+                font_size: 75
+                name: RAM
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.disk_use_percent_home
+                font_size: 75
+                name: Disk
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+            type: horizontal-stack
+          - type: vertical-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: glance
+                    entities:
+                      - entity: sensor.count_binary_sensors
+                        name: Binary Sensors
+                        icon: mdi:motion-sensor
+                      - entity: sensor.count_sensors
+                        name: Sensors
+                        icon: mdi:home-thermometer
+                      - entity: sensor.count_automations
+                        name: Automations
+                        icon: mdi:robot
+                    show_icon: mdi:lamp
+                    show_state: true
+                    state_color: false
+                    style: |
+                      ha-card {
+                        word-wrap: normal
+                      }
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: glance
+                    entities:
+                      - entity: sensor.count_device_trackers
+                        name: Device Trackers
+                        icon: mdi:radar
+                      - entity: sensor.count_switches
+                        name: Switches
+                        icon: mdi:light-switch
+                      - entity: sensor.count_scripts
+                        name: Scripts
+                        icon: mdi:script-text
+                    show_state: true
+                    state_color: false
+                    style: |
+                      ha-card {
+                        word-wrap: normal
+                      }
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/ha.png'
+                  style='vertical-align:middle' /> Restart Services
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:home-assistant
+                        name: Hassio
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: homeassistant.restart
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:robot
+                        name: Automation
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: automation.reload
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:cogs
+                        name: Core Config
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: homeassistant.reload_core_config
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:script-text
+                        name: Script
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: script.reload
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:group
+                        name: Groups
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: group.reload
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - entities:
+                      - entity: zone.home
+                        icon: mdi:format-paint
+                        name: Frontend
+                        tap_action:
+                          action: call-service
+                          confirmation: Are you sure?
+                          service: frontend.reload_themes
+                    show_header_toggle: false
+                    show_state: false
+                    style: |
+                      ha-card {
+                        text-align: center;
+                            }    
+                    title: false
+                    type: glance
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+  - title: ''
+    path: media
+    icon: mdi:television-classic
+    badges: []
+    cards:
+      - cards:
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/vaccum.png'
+                  style='vertical-align:middle' /> TV
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: media-control
+                    entity: media_player.shield_androidtv
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: media-control
+                    entity: media_player.video_projecteur_2
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: call-service
+                      service: androidtv.adb_command
+                      service_data:
+                        command: POWER
+                      target:
+                        entity_id: media_player.shield_androidtv
+                    show_state: false
+                    icon: mdi:power
+                    icon_height: 30px
+                    name: Shield
+                  - type: button
+                    entity: light.hyperhdr_group
+                    name: HyperHDR
+                    show_state: false
+                    icon_height: 30px
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: call-service
+                      service: cover.set_cover_tilt_position
+                      service_data:
+                        tilt_position: 70
+                      target:
+                        entity_id: cover.volet_salon
+                    entity: cover.volets
+                    show_state: false
+                    icon_height: 30px
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/vaccum.png'
+              style='vertical-align:middle' /> Spotify
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:spotify-card
+                limit: 10
+                spotify_entity: media_player.spotify_gautier63
+                playlist_type: default
+                account: default
+                always_play_random_song: true
+                display_style: list
+                hide_top_header: true
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+  - title: test
+    path: test
+    badges: []
+    cards:
+      - type: conditional
+        conditions:
+          - entity: sensor.light_recap
+            state: '0'
+        card:
+          type: entities
+          entities:
+            - type: custom:auto-entities
+              name: Lumières
+              filter:
+                include:
+                  - domain: light
+                exclude:
+                  - state: 'off'
+                  - state: unavailable
+              show_empty: false
+              card:
+                type: custom:fold-entity-row
+                head: sensor.light_recap
+                collapse: 4
+      - type: entities
+        entities:
+          - entity: sensor.porte_last_changed
+            name: Porte d'entrée
+            icon: mdi:information
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            style: |
+              ha-card {
+                border-radius: 20px ;
+              }
+            entity: person.gautier
+            name: Gautier
+            aspect_ratio: 1/1
+            show_entity_picture: true
+            show_icon: false
+            show_name: false
+            show_state: false
+            show_label: true
+            label: |
+              [[[
+                  if (states['person.gautier'].state == "home")
+                    return 'Maison';
+                  if (states['person.gautier'].state == "Travail Gautier")
+                    return 'Travail';
+                  return 'Absent';  ]]]
+            styles:
+              entity_picture:
+                - border-radius: 50%
+                - top: 5%
+                - left: 5%
+                - width: 40%
+                - color: gray
+                - opacity: 60%
+              name:
+                - top: 5%
+                - left: 8%
+                - position: absolute
+                - color: white
+                - font-size: 85%
+              state:
+                - top: 79%
+                - left: 5%
+                - position: absolute
+              label:
+                - font-size: 130%
+                - font-weight: bold
+                - top: 58%
+                - left: 8%
+                - position: absolute
+                - color: |
+                    [[[
+                      if (states['person.gautier'].state == "home")
+                        return 'white';
+                      if (states['person.gautier'].state == "Travail Gautier")
+                        return 'white';
+                      return 'lightgray';
+                    ]]]
+              card:
+                - font-size: 100%
+                - opacity: |
+                    [[[
+                       if (states['person.gautier'].state == "home")
+                         return '100%';
+                       if (states['person.gautier'].state == "Travail Gautier")
+                         return '80%';
+                       return '80%';
+                     ]]]
+                - background-color: |
+                    [[[
+                       if (states['person.gautier'].state == "home")
+                         return '';
+                       if (states['person.gautier'].state == "Travail Gautier")
+                         return 'var(--primary-color)';
+                       return 'grey';
+                     ]]]
+              custom_fields:
+                person_state:
+                  - font-size: 100%
+                  - top: 75%
+                  - left: 8%
+                  - color: lightgray
+                  - position: absolute
+                circle:
+                  - top: 10%
+                  - left: 55%
+                  - width: 35%
+                  - position: absolute
+                  - letter-spacing: 0.03vw
+                  - stroke: |
+                      [[[
+                        if (states['sensor.pixel_5_niveau_de_batterie'].state < 20)
+                          return 'red';
+                       return 'lightgray';
+                      ]]]
+            extra_styles: |
+              @keyframes ball-scale {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+              @keyframes ball-scale2 {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+            state:
+              - value: 'on'
+                styles:
+                  card:
+                    - box-shadow: ' outset -1px -1px 2px 0px rgb(12, 12, 14) '
+                    - animation: ball-scale 0.2s
+                    - border-width: 1px
+              - value: 'off'
+                styles:
+                  card:
+                    - box-shadow: 1px 1px 5px 0px rgb(12, 12, 14)
+                    - animation: ball-scale2 0.2s
+                    - border-width: 1px
+            custom_fields:
+              person_state: |
+                [[[
+                  if (states['sensor.gautier_last_changed'].state == '')
+                    return 'A l\'instant';
+                 return states['sensor.gautier_last_changed'].state;
+                ]]]
+              circle: |
+                [[[ if (entity.state != 'unavailable' ) 
+                {
+                   ;
+                   const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                   return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                   transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - states['sensor.pixel_5_niveau_de_batterie'].state / 100 * circumference};" />
+                   <text x="50%" y="54%" fill="lightgray" font-size="13" text-anchor="middle" alignment-baseline="middle">${states['sensor.pixel_5_niveau_de_batterie'].state}%<tspan font-size="10"></tspan></text></svg>`; } ]]]
+          - type: custom:button-card
+            style: |
+              ha-card {
+                border-radius: 20px ;
+              }
+            entity: person.manon
+            name: Manon
+            aspect_ratio: 1/1
+            show_entity_picture: true
+            show_icon: false
+            show_name: false
+            show_state: false
+            show_label: true
+            label: |
+              [[[
+                  if (states['person.manon'].state == "home")
+                    return 'Maison';
+                  if (states['person.manon'].state == "Travail Manon")
+                    return 'Travail';
+                  return 'Absent';  ]]]
+            styles:
+              entity_picture:
+                - border-radius: 50%
+                - top: 5%
+                - left: 5%
+                - width: 40%
+                - color: gray
+                - opacity: 60%
+              name:
+                - top: 5%
+                - left: 8%
+                - position: absolute
+                - color: white
+                - font-size: 85%
+              state:
+                - top: 79%
+                - left: 5%
+                - position: absolute
+              label:
+                - font-size: 130%
+                - font-weight: bold
+                - top: 58%
+                - left: 8%
+                - position: absolute
+                - color: |
+                    [[[
+                      if (states['person.manon'].state == "home")
+                        return 'white';
+                      if (states['person.manon'].state == "Travail Manon")
+                        return 'white';
+                      return 'lightgray';
+                    ]]]
+              card:
+                - font-size: 100%
+                - opacity: |
+                    [[[
+                       if (states['person.manon'].state == "home")
+                         return '100%';
+                       if (states['person.manon'].state == "Travail Manon")
+                         return '80%';
+                       return '80%';
+                     ]]]
+                - background-color: |
+                    [[[
+                       if (states['person.manon'].state == "home")
+                         return '';
+                       if (states['person.manon'].state == "Travail Manon")
+                         return 'var(--primary-color)';
+                       return 'grey';
+                     ]]]
+              custom_fields:
+                person_state:
+                  - font-size: 100%
+                  - top: 75%
+                  - left: 8%
+                  - color: lightgray
+                  - position: absolute
+                circle:
+                  - top: 10%
+                  - left: 55%
+                  - width: 35%
+                  - position: absolute
+                  - letter-spacing: 0.03vw
+                  - stroke: |
+                      [[[
+                        if (states['sensor.iphone_de_manon_battery_level'].state < 20)
+                          return 'red';
+                       return 'lightgray';
+                      ]]]
+            extra_styles: |
+              @keyframes ball-scale {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+              @keyframes ball-scale2 {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+            state:
+              - value: 'on'
+                styles:
+                  card:
+                    - box-shadow: ' outset -1px -1px 2px 0px rgb(12, 12, 14) '
+                    - animation: ball-scale 0.2s
+                    - border-width: 1px
+              - value: 'off'
+                styles:
+                  card:
+                    - box-shadow: 1px 1px 5px 0px rgb(12, 12, 14)
+                    - animation: ball-scale2 0.2s
+                    - border-width: 1px
+            custom_fields:
+              person_state: |
+                [[[
+                  if (states['sensor.manon_last_changed'].state == '')
+                    return 'A l\'instant';
+                 return states['sensor.manon_last_changed'].state;
+                ]]]
+              circle: |
+                [[[ if (entity.state != 'unavailable' ) 
+                {
+                   ;
+                   const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                   return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                   transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - states['sensor.iphone_de_manon_battery_level'].state / 100 * circumference};" />
+                   <text x="50%" y="54%" fill="lightgray" font-size="13" text-anchor="middle" alignment-baseline="middle">${states['sensor.iphone_de_manon_battery_level'].state}%<tspan font-size="10"></tspan></text></svg>`; } ]]]
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            style: |
+              ha-card {
+                border-radius: 20px ;
+              }
+            entity: sensor.elec_current_price
+            name: Elec
+            icon: mdi:transmission-tower
+            aspect_ratio: 1/1
+            show_icon: true
+            show_name: true
+            show_state: false
+            show_label: true
+            label: Aujourd'hui
+            styles:
+              icon:
+                - top: '-21%'
+                - left: '-27%'
+                - width: 35%
+                - position: relative
+                - color: white
+              name:
+                - top: 60%
+                - left: 10%
+                - position: absolute
+                - font-weight: bold
+                - color: white
+                - font-size: 120%
+              state:
+                - top: 75%
+                - left: 10%
+                - position: absolute
+                - font-size: 100%
+                - color: red
+              label:
+                - top: 74%
+                - left: 10%
+                - position: absolute
+                - font-weight: bold
+                - font-size: 100%
+              card:
+                - font-size: 100%
+                - border-color: rgba(152, 167, 185, 0.2)
+                - background-color: ''
+              custom_fields:
+                graph:
+                  - position: absolute
+                  - top: 70%
+                  - left: 50%
+                  - width: 100%
+                  - transform: translate(-50%, calc(-50% + 35px))
+                  - z-index: 12
+                  - '--paper-card-background-color': rgba(0, 0, 0, 0.0)
+                  - '--ha-card-background': rgba(0, 0, 0, 0.0)"
+                  - '--ha-card-box-shadow': none
+                circle:
+                  - top: 10%
+                  - left: 55%
+                  - width: 40%
+                  - position: absolute
+                  - letter-spacing: 0.03vw
+                  - stroke: |
+                      [[[
+                        if (states['sensor.elec_current_price'].state > 4)
+                          return 'red';
+                        if (states['sensor.elec_current_price'].state > 3)
+                          return 'orange';
+                       return 'green';
+                      ]]]
+            extra_styles: |
+              @keyframes ball-scale {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+              @keyframes ball-scale2 {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+            custom_fields:
+              graph:
+                card:
+                  type: custom:mini-graph-card
+                  entities:
+                    - entity: sensor.consommation_day
+                  points_per_hour: 4
+                  hours_to_show: 168
+                  show:
+                    fill: fade
+                    icon: false
+                    name: false
+                    state: false
+                    legend: false
+                    points: true
+                    labels: false
+                    graph: bar
+              circle: |
+                [[[ if (entity.state != 'unavailable' ) 
+                {
+                   ;
+                   const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                   return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                   transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                   <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_current_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+            tap_action:
+              action: more-info
+          - type: custom:button-card
+            style: |
+              ha-card {
+                border-radius: 20px ;
+              }
+            entity: sensor.elec_yesterday_price
+            name: Elec
+            icon: mdi:lightning-bolt
+            aspect_ratio: 1/1
+            show_icon: true
+            show_name: true
+            show_state: false
+            show_label: true
+            label: Hier
+            styles:
+              icon:
+                - top: '-21%'
+                - left: '-27%'
+                - width: 35%
+                - position: relative
+                - color: white
+              name:
+                - top: 60%
+                - left: 10%
+                - position: absolute
+                - font-weight: bold
+                - color: white
+                - font-size: 120%
+              state:
+                - top: 75%
+                - left: 10%
+                - position: absolute
+                - font-size: 100%
+                - color: red
+              label:
+                - top: 74%
+                - left: 10%
+                - position: absolute
+                - font-weight: bold
+                - font-size: 100%
+              card:
+                - font-size: 100%
+                - border-color: rgba(152, 167, 185, 0.2)
+                - background-color: ''
+              custom_fields:
+                circle:
+                  - top: 10%
+                  - left: 55%
+                  - width: 40%
+                  - position: absolute
+                  - letter-spacing: 0.03vw
+                  - stroke: |
+                      [[[
+                        if (states['sensor.elec_yesterday_price'].state > 4)
+                          return 'red';
+                        if (states['sensor.elec_yesterday_price'].state > 3)
+                          return 'orange';
+                       return 'green';
+                      ]]]
+            extra_styles: |
+              @keyframes ball-scale {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+              @keyframes ball-scale2 {
+                from {
+                  transform: scale(1);
+                }
+                to {
+                  transform: scale(0.90);
+                }
+              }
+            custom_fields:
+              circle: |
+                [[[ if (entity.state != 'unavailable' ) 
+                {
+                   ;
+                   const radius = 20.5; const circumference = radius * 2 * Math.PI; 
+                   return `<svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="${radius}" stroke="lightgray" stroke-width="1" fill="none" style="
+                   transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference - 100 / 100 * circumference};" />
+                   <text x="50%" y="54%" fill="lightgray" font-size="10" text-anchor="middle" alignment-baseline="middle">${states['sensor.elec_yesterday_price'].state}<tspan font-size="10"></tspan></text></svg>`; } ]]]
+            tap_action:
+              action: more-info
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.consommation_day
+        points_per_hour: 4
+        hours_to_show: 168
+        show:
+          fill: fade
+          icon: false
+          name: false
+          state: false
+          legend: false
+          points: true
+          labels: false
+          graph: bar
+      - type: button
+        tap_action:
+          action: call-service
+          service: androidtv.adb_command
+          service_data:
+            command: SLEEP
+          target:
+            entity_id: media_player.shield_androidtv
+        entity: media_player.shield
+        show_state: true
+        icon: mdi:power
+      - type: iframe
+        url: >-
+          http://192.168.20.10:8123/api/hassio_ingress/lNVTEM8HQOBC9Jzh309JDyYlSqH2V3l-KvBuytYlcHI/d/1NQo6vBnk/test?orgId=1
+        aspect_ratio: 100%

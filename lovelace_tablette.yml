@@ -1,0 +1,747 @@
+title: Maison
+views:
+  - theme: Mushroom
+    title: Mobile
+    path: mobile
+    icon: mdi:cellphone
+    type: custom:grid-layout
+    badges: []
+    cards:
+      - square: false
+        columns: 3
+        type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: grid
+                square: false
+                columns: 3
+                cards:
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.netatmo_maison_salon_temperature
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Salon
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.netatmo_maison_salon_chambre_temperature
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Chambre
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.netatmo_maison_salon_agathe_temperature
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Agathe
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.netatmo_maison_salon_exterieur_temperature
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Exterieur
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.netatmo_maison_salon_bureau_temperature
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Bureau
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.temperature_ble_sdb
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: SDB
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.temperature_ble_cuisine
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Cuisine
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.temperature_ble_hall
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Hall
+                  - type: custom:mushroom-entity-card
+                    entity: sensor.temperature_ble_entree
+                    layout: vertical
+                    fill_container: false
+                    primary_info: name
+                    name: Entrée
+              - color_type: blank-card
+                styles:
+                  card:
+                    - height: 20px
+                type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-climate-card
+                    entity: climate.rdc
+                    show_temperature_control: true
+                    collapsible_controls: true
+                    hvac_modes:
+                      - heat
+                      - auto
+                      - 'off'
+                    secondary_info: state
+                    tap_action:
+                      action: call-service
+                      service: climate.set_hvac_mode
+                      data:
+                        hvac_mode: 'off'
+                      target:
+                        entity_id: climate.rdc
+                    hold_action:
+                      action: call-service
+                      service: climate.set_temperature
+                      data:
+                        target_temp_high: 20.5
+                        target_temp_low: 18.5
+                        hvac_mode: heat
+                      target:
+                        entity_id: climate.rdc
+                  - type: custom:mushroom-climate-card
+                    entity: climate.etage
+                    show_temperature_control: true
+                    collapsible_controls: true
+                    hvac_modes:
+                      - heat
+                      - auto
+                      - 'off'
+                    secondary_info: state
+          - type: vertical-stack
+            cards:
+              - type: markdown
+                content: "# {{\_states(\"sensor.full_time\") }}\n## {{\_states(\"sensor.full_date\") }}\n### {{\_states(\"sensor.ephemeride\") }}\n"
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                      text-align: center
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 50px;
+                        font-style: bold;
+                        text-align: center;
+                        font-weight: bolder;
+                        letter-spacing: '-0.01em';
+                      }
+                      h2 {
+                        font-size: 25px;
+                        font-style: bold;
+                        text-align: center;
+                        font-weight: lighter;
+                        letter-spacing: '-0.01em';
+                      }
+                      h3 {
+                        font-size: 20px;
+                        font-weight: lighter;
+                        font-style: italic;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-chips-card
+                    chips:
+                      - type: template
+                        entity: input_boolean.is_jour
+                        icon: |-
+                          {% if is_state('input_boolean.is_jour', 'on') %}
+                              mdi:white-balance-sunny
+                          {% else %}
+                              mdi:weather-night
+                          {% endif %}
+                        icon_color: |2
+                           {% if is_state('input_boolean.is_jour', 'on') %}
+                              green
+                            {% else %}
+                            {% endif %}
+                        content: |-
+                          {% if is_state('input_boolean.is_jour', 'on') %}
+                              Jour
+                          {% else %}
+                              Nuit
+                          {% endif %}
+                      - type: template
+                        icon_color: |2
+                           {% if is_state('input_boolean.presence', 'on') %}
+                              green
+                            {% else %}
+                              red
+                            {% endif %}
+                        entity: input_boolean.presence
+                        content: |2
+                           {% if is_state('input_boolean.presence', 'on') %}
+                              Présent
+                            {% else %}
+                              Absent
+                            {% endif %}
+                        icon: mdi:account
+                      - type: template
+                        entity: input_boolean.guest_mode
+                        icon: |-
+                          {% if is_state('input_boolean.guest_mode', 'on') %}
+                              mdi:party-popper
+                          {% else %}
+                              mdi:home-heart
+                          {% endif %}
+                        icon_color: |-
+                          {% if is_state('input_boolean.guest_mode', 'on') %}
+                              green
+                          {% else %}
+                          {% endif %}
+                        content: |-
+                          {% if is_state('input_boolean.guest_mode', 'on') %}
+                              Invité
+                          {% else %}
+                              Pas d'invité
+                          {% endif %}
+                      - type: template
+                        entity: input_boolean.holidays
+                        icon: |-
+                          {% if is_state('input_boolean.holidays', 'on') %}
+                              mdi:beach
+                          {% else %}
+                             mdi:home-account
+                          {% endif %}
+                        icon_color: |-
+                          {% if is_state('input_boolean.holidays', 'on') %}
+                              red
+                          {% else %}
+                          {% endif %}
+                        content: |-
+                          {% if is_state('input_boolean.holidays', 'on') %}
+                              Vacances
+                          {% else %}
+                              Normal
+                          {% endif %}
+                      - type: weather
+                        entity: weather.forecast_riom
+                        show_conditions: true
+                        show_temperature: true
+                      - type: conditional
+                        conditions:
+                          - entity: sensor.light_recap
+                            state_not: Toutes les lumières sont éteintes
+                        chip:
+                          type: entity
+                          entity: sensor.light_recap
+                      - type: alarm-control-panel
+                        entity: alarm_control_panel.ha_alarm
+                      - type: template
+                        icon: mdi:window-open-variant
+                        entity: sensor.fenetre_recap
+                        icon_color: >-
+                          {% if is_state("sensor.fenetre_recap", "Toutes les
+                          fenêtres sont fermeés") -%}   {%-
+                            else -%} red {%- endif %}
+                        content: >-
+                          {% if is_state("sensor.fenetre_recap", "Toutes les
+                          fenêtres sont fermeés") -%}  Fenêtres fermées {%-
+                            else -%}  {{states("sensor.fenetre_recap")}} {%- endif %}
+                      - type: entity
+                        entity: sensor.elec_yesterday_price
+                        icon: mdi:lightning-bolt
+                      - type: template
+                        entity: sensor.since_last_motion
+                        icon: >-
+                          {% if is_state("sensor.since_last_motion", "0") -%} 
+                          mdi:motion-sensor {%-
+                            else -%}  mdi:motion-sensor-off {%- endif %}
+                        icon_color: >-
+                          {% if is_state("sensor.since_last_motion", "0") -%} 
+                          red {%-
+                            else -%}  green  {%- endif %}
+                        content: >-
+                          {% if is_state("sensor.since_last_motion", "0") -%}
+                          {%-
+                            else -%}  {{ states('sensor.since_last_motion') }}
+                            min  {%- endif %}
+                      - type: entity
+                        entity: vacuum.xiaomi_vacuum_cleaner
+                        name: Henry
+                      - type: entity
+                        entity: sensor.moon_phases
+                        content_info: state
+                        icon: mdi:moon-waxing-crescent
+                        use_entity_picture: true
+                    alignment: center
+              - type: markdown
+                content: '{{ states(''sensor.savoir_scrape'') }}'
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                      text-align: center
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 30px;
+                        font-style: bold;
+                        #text-align: center;
+                        font-weight: bolder;
+                        letter-spacing: '-0.01em';
+                      }
+                      h2 {
+                        font-size: 25px;
+                        font-style: bold;
+                        #text-align: center;
+                        font-weight: lighter;
+                        letter-spacing: '-0.01em';
+                      }
+                      h3 {
+                        font-size: 20px;
+                        font-weight: lighter;
+                        font-style: italic;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+          - type: vertical-stack
+            cards:
+              - square: false
+                columns: 3
+                type: grid
+                cards:
+                  - type: custom:mushroom-light-card
+                    entity: light.lights_salon
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/3
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    icon: hue:room-living
+                    layout: vertical
+                    name: Salon
+                  - type: custom:mushroom-light-card
+                    show_brightness_control: false
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/cuisine
+                    icon: hue:room-kitchen
+                    entity: light.lights_cuisine
+                    layout: vertical
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    name: Cuisine
+                  - type: custom:mushroom-light-card
+                    entity: light.lights_entree
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    show_color_temp_control: false
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/1
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    icon: hue:room-front-door
+                    layout: vertical
+                    name: Entrée
+                  - type: custom:mushroom-light-card
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/4
+                    icon: hue:room-stairs
+                    entity: light.lights_escalier
+                    layout: vertical
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    name: Escalier
+                  - type: custom:mushroom-light-card
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    icon: hue:room-bedroom
+                    entity: light.chambre
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/2
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    layout: vertical
+                  - type: custom:mushroom-light-card
+                    entity: light.chambre_agathe
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    show_color_temp_control: false
+                    collapsible_controls: true
+                    icon: hue:room-kids
+                    tap_action:
+                      action: navigate
+                      navigation_path: /lovelace-test/chambre-agathe
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    layout: vertical
+                  - type: custom:mushroom-light-card
+                    show_brightness_control: false
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    icon: mdi:shower
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    layout: vertical
+                    name: 'SDB Étage '
+                    entity: light.lights_sdb_etage
+                  - type: custom:mushroom-light-card
+                    show_brightness_control: false
+                    use_light_color: false
+                    show_color_control: false
+                    show_color_temp_control: false
+                    collapsible_controls: true
+                    icon: mdi:shower-head
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    name: SDB Bas
+                    layout: vertical
+                    entity: light.lights_sdb_bas
+                  - type: custom:mushroom-light-card
+                    entity: light.plafond_dressing
+                    show_brightness_control: true
+                    use_light_color: true
+                    show_color_control: false
+                    collapsible_controls: true
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: toggle
+                    double_tap_action:
+                      action: toggle
+                    icon: mdi:dresser
+                    layout: vertical
+                    name: Dressing
+              - type: conditional
+                conditions:
+                  - entity: sensor.light_recap
+                    state_not: Toutes les lumières sont éteintes
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: conditional
+                      conditions:
+                        - entity: sensor.light_recap
+                          state_not: 0 lampes sont allumées
+                      card:
+                        type: entities
+                        entities:
+                          - type: custom:auto-entities
+                            name: Lumières
+                            filter:
+                              include:
+                                - domain: light
+                              exclude:
+                                - state: 'off'
+                                - state: unavailable
+                                - attributes:
+                                    is_hue_group: true
+                                - name: Lights *
+                            show_empty: false
+                            unique: true
+                            card:
+                              type: custom:fold-entity-row
+                              head:
+                                entity: sensor.light_recap
+                                icon: mdi:lamp
+                                name: Lumières
+                              collapse: 4
+              - color_type: blank-card
+                styles:
+                  card:
+                    - height: 20px
+                type: custom:button-card
+  - theme: Backend-selected
+    subview: true
+    icon: hue:room-front-door
+    title: 'Entrée '
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.entree_plafond
+            fill_container: true
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.hue_go_entree
+            icon: hue:go
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+  - theme: Backend-selected
+    subview: true
+    title: 'Chambre '
+    icon: hue:room-bedroom
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.chambre_plafond
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.hue_lightstrip_lit
+            icon: hue:lightstrip
+            fill_container: true
+            layout: vertical
+            secondary_info: none
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+  - theme: Backend-selected
+    icon: hue:room-living
+    subview: true
+    title: Salon
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            icon: hue:adore-mirror
+            entity: light.lumiere_indirecte
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            icon: hue:play-bar-v-two-out
+            entity: light.hue_plays_group
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.hue_go_canape
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            icon: hue:go
+          - type: custom:mushroom-light-card
+            entity: light.hue_go_salon
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            icon: hue:go
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            entity: light.hue_lightstrip_salon_meuble
+            icon: hue:lightstrip
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            entity: light.lampadaire_enfants
+            icon: hue:beyond
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_temp_control: false
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            entity: light.salon_plafond
+            icon: hue:ceiling-beyond
+          - type: custom:mushroom-light-card
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            show_color_control: true
+            collapsible_controls: true
+            secondary_info: none
+            icon: hue:ceiling-beyond
+            entity: light.salle_a_manger_plafond
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.wled_group
+            icon: hue:lightstrip-tv
+            fill_container: true
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            show_color_control: true
+            collapsible_controls: true
+  - theme: Backend-selected
+    subview: true
+    title: Escalier
+    icon: hue:room-stairs
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.escalier_bas
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            layout: vertical
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.escalier_haut
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.hue_lightstrip_hall
+            layout: vertical
+            fill_container: true
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            icon: hue:lightstrip
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.hall_etage
+            icon: hue:bulb-filament-a19-hung
+            fill_container: true
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+  - theme: Backend-selected
+    title: Chambre Agathe
+    path: chambre-agathe
+    icon: hue:room-kids
+    subview: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.agathe_plafond
+            fill_container: true
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.hue_go_agathe
+            icon: hue:go
+            fill_container: true
+            layout: vertical
+            secondary_info: none
+            collapsible_controls: true
+            use_light_color: true
+            show_brightness_control: true
+  - theme: Backend-selected
+    title: Cuisine
+    path: cuisine
+    icon: hue:room-kitchen
+    subview: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-light-card
+            entity: light.spots_cuisine_bar
+            fill_container: true
+            layout: vertical
+            use_light_color: true
+            show_brightness_control: true
+            collapsible_controls: true
+            secondary_info: none
+          - type: custom:mushroom-light-card
+            entity: light.spots_cuisine_evier
+            fill_container: true
+            layout: vertical
+            secondary_info: none
+            collapsible_controls: true
+            use_light_color: true
+            show_brightness_control: true
