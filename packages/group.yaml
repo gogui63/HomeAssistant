@@ -9,53 +9,105 @@ group:
           - binary_sensor.door_window_4
           - binary_sensor.door_window_5_chambre
           - binary_sensor.door_window_6_chambre
-          - binary_sensor.door_window_7_gedeon
+          - binary_sensor.door_window_7_agathe
       
   all_stores:
       name: Volets
       icon: mdi:window-shutter
       entities:
-          - cover.volet_gedeon
-          - cover.volet_chambre
-          - cover.volet_salon
+          - cover.salon_1
+          - cover.salon_2
+          - cover.cuisine
+          - cover.bureau
 
 
   lights_salon:
-    - light.salle_a_manger
-    - light.salon_2
-    - light.hue_color_lamp_1
-    - light.hue_lightstrip_bar
-    - light.hue_lightstrip_salon_meuble
-    - light.hue_play_centre
-    - light.hue_play_gauche
-    - light.hue_play_droite
-    - light.hue_go_1
+      name: Lights Group Salon
+      icon: hue:room-living
+      entities:
+        - light.salon_plafond
+        - light.salle_a_manger_plafond
+        - light.hue_go_salon
+        - light.hue_lightstrip_salon_meuble
+        - light.hue_play_centre
+        - light.hue_play_gauche
+        - light.hue_play_droite
+        - light.lampadaire_enfants
+        - light.lampadaire_salon
+        - light.wled_bandeau
+        - light.wled_ring
+        
+  lights_sdb_etage:
+      name: Lights Group SDB Étage
+      icon: hue:room-bathroom
+      entities: 
+        - light.spot_sdb_1_etage
+        - light.spot_sdb_2_etage
+        - light.spot_sdb_3_etage
 
   lights_chambre:
-    - light.chambre_plafond
-    - light.hue_lightstrip_lit
+      name: Lights Group Chambre
+      icon: hue:room-bedroom
+      entities:
+        - light.chambre_plafond
+        - light.hue_lightstrip_lit
 
   lights_agathe:
-    - light.agathe_plafond
-    - light.lampadaire_agathe
+      name: Lights Group Chambre Agathe
+      icon: hue:room-kids
+      entities:
+        - light.agathe_plafond
+        - light.bandeau_agathe
+        - light.hue_go_agathe
 
   lights_cuisine: 
-    - light.hue_white_lamp_1
-    - light.hue_white_lamp_2
-    - light.hue_white_lamp_3
-    - light.yeelight_cuisine
+      name: Lights Group Cuisine
+      icon: hue:room-kitchen
+      entities:
+        - light.spots_cuisine_bar
+        - light.spots_cuisine_evier
 
-  lights_sdb:
-    - light.miroir_sdb_droite
-    - light.miroir_sdb_gauche
-    - light.sdb
+  lights_sdb_haut:
+      name: Lights Group SDB Haut
+      icon: hue:room-bathroom
+      entities:
+        - light.spot_sdb_1_etage
+        - light.spot_sdb_2_etage
+        - light.spot_sdb_3_etage
+        
+  lights_sdb_bas:
+      name: Lights Group SDB Bas
+      icon: hue:room-bathroom
+      entities:
+        - light.spot_sdb_bas
+        - light.sdb_rdc_plafond
     
-  lights_wc: 
-    - light.wc
+  lights_wc:
+      name: Lights Group WC
+      icon: hue:room-toilet
+      entities:
+        - light.wc
 
   lights_hall:
-    - light.hall_couloir
-    - light.hue_go
+      name: Lights Group Hall
+      icon: hue:room-hallway
+      entities:
+        - light.hall_plafond
+        - light.hue_lightstrip_hall
+
+  lights_escalier:
+      name: Lights Group Hall
+      icon: hue:room-stairs
+      entities:
+        - light.hall_plafond
+        - light.hue_lightstrip_hall
+
+  lights_entree:
+      name: Lights Group Entrée
+      icon: hue:room-front-door
+      entities:
+        - light.entree_plafond
+        - light.hue_go_entree
 
   people_status:
     name: People Status

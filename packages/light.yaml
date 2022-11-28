@@ -1,25 +1,163 @@
 light:
   - platform: group
+    name: Lights ALL
+    entities:
+      - light.agathe_plafond
+      - light.bandeau
+      - light.bandeau_agathe
+      - light.chambre
+      - light.chambre_agathe
+      - light.chambre_plafond
+      - light.entree_plafond
+      - light.entree_plafond_old
+      - light.escalier
+      - light.escalier_haut
+      - light.hall
+      - light.hall_plafond
+      - light.hue_go_agathe
+      - light.hue_go_canape
+      - light.hue_go_entree
+      - light.hue_go_salon
+      - light.hue_lightstrip_hall
+      - light.hue_lightstrip_lit
+      - light.hue_lightstrip_salon_meuble
+      - light.hue_play_centre
+      - light.hue_play_droite
+      - light.hue_play_gauche
+      - light.hue_plays_group
+      - light.hue_plays_hyperhdr
+      - light.huego_ring
+      - light.hyperhdr_group
+      - light.lampadaire_enfants
+      - light.lampadaire_salon
+      - light.lumiere_indirecte
+      - light.miroir_sdb_droite
+      - light.miroir_sdb_gauche
+      - light.notepad_k10_screen
+      - light.salle_a_manger_plafond
+      - light.sdb_rdc_plafond
+      - light.salon
+      - light.salon_plafond
+      - light.toilettes
+      - light.wc
+      - light.wled_bandeau
+      - light.wled_group
+      - light.wled_ring
+      - light.xiaomi_gateway_light
+      - light.hall_etage
+      - light.spots_cuisine_bar
+      - light.spots_cuisine_evier
+      - light.spot_sdb_bas
+      - light.spot_sdb_1_etage
+      - light.spot_sdb_2_etage
+      - light.spot_sdb_3_etage
+      - light.plafond_dressing
+  - platform: group
     name: Lumiere Indirecte
     entities:
-      - light.hue_go_1
-      - light.hue_go
-      - light.hue_lightstrip_bar
+      - light.hue_go_salon
       - light.hue_lightstrip_salon_meuble
       - light.hue_play_centre
       - light.hue_play_gauche
       - light.hue_play_droite
-      
-  - platform: template
-    lights:
-      miroir_sdb:
-        friendly_name: "Miroir SDB"
-        value_template: "{{ states('switch.sonoff_sdb') }}"
-        turn_on:
-          service: switch.turn_on
-          data:
-            entity_id: switch.sonoff_sdb
-        turn_off:
-          service: switch.turn_off
-          data:
-            entity_id: switch.sonoff_sdb
+      - light.wled_ring
+      - light.lampadaire_enfants
+      - light.hue_go_canape
+  - platform: group
+    name: Lights SDB Étage
+    entities: 
+      - light.spot_sdb_1_etage
+      - light.spot_sdb_2_etage
+      - light.spot_sdb_3_etage
+  - platform: group
+    name: Hue Plays Group
+    entities:
+      - light.hue_play_centre
+      - light.hue_play_gauche
+      - light.hue_play_droite
+  - platform: group
+    name: WLED Group
+    entities:
+      - light.wled_bandeau
+      - light.wled_ring    
+  - platform: group
+    name: HyperHDR Group
+    entities:
+      - light.bandeau
+      - light.huego_ring
+      - light.hue_plays_hyperhdr
+  - platform: group
+    name: Lights Salon
+    entities:
+      - light.lampadaire_enfants
+      - light.lampadaire_salon
+      - light.hue_go_canape
+      - light.salon_plafond
+      - light.hue_lightstrip_salon_meuble
+      - light.hue_play_centre
+      - light.hue_play_gauche
+      - light.hue_play_droite
+      - light.salle_a_manger_plafond
+      - light.hue_go_salon
+      - light.wled_group
+  - platform: group
+    name: Lights Chambre
+    entities:
+      - light.chambre_plafond
+      - light.hue_lightstrip_lit
+  - platform: group
+    name: Lights Chambre Agathe
+    entities:
+      - light.agathe_plafond
+      - light.bandeau_agathe
+      - light.hue_go_agathe
+  - platform: group
+    name: Lights Cuisine
+    entities:
+      - light.spots_cuisine_bar
+      - light.spots_cuisine_evier
+  - platform: group
+    name: Lights SDB Haut
+    entities:
+      - light.spot_sdb_1_etage
+      - light.spot_sdb_2_etage
+      - light.spot_sdb_3_etage
+  - platform: group
+    name: Lights SDB Bas
+    entities:
+      - light.spot_sdb_bas
+      - light.sdb_rdc_plafond
+  - platform: group
+    name: Lights WC
+    entities:
+      - light.wc
+  - platform: group
+    name: Lights Hall Etage
+    entities:
+      - light.hall_etage
+      - light.hue_lightstrip_hall
+  - platform: group
+    name: Lights Entrée
+    entities:
+      - light.entree_plafond
+      - light.hue_go_entree    
+  - platform: group
+    name: Lights Escalier
+    entities:
+      - light.escalier_bas
+      - light.escalier_haut
+      - light.hue_lightstrip_hall
+      - light.hall_etage
+#  - platform: template
+#    lights:
+#      miroir_sdb:
+#        friendly_name: "Miroir SDB"
+#        value_template: "{{ states('switch.sonoff_sdb') }}"
+#        turn_on:
+#          service: switch.turn_on
+#          data:
+#            entity_id: switch.sonoff_sdb
+#        turn_off:
+#          service: switch.turn_off
+#          data:
+#            entity_id: switch.sonoff_sdb

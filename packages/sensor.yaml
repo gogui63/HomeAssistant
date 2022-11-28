@@ -1,113 +1,10 @@
 sensor:
-
-  #===============================================================================#
-  #==== POLLEN ===================================================================#
-  #===============================================================================#  
-
-  - platform: rest
-    name: 'Pollen level'
-    resource: https://www.pollens.fr/risks/thea/counties/06
-    json_attributes:
-      - risks
-    value_template: '{{value_json.riskLevel}}'
-    scan_interval: 21600
-    headers: 
-      User-Agent: Home Assistant
-      Content-Type: application/json
-
-  - platform: rest
-    name: pollen_data
-    scan_interval: 3600
-    resource_template: https://api.ambeedata.com/latest/pollen/by-lat-lng?lat={{ state_attr("zone.home", "latitude") }}&lng={{ state_attr("zone.home", "longitude") }}
-    value_template: >-
-      {{ value_json.message}}
-    headers:
-      content-type: application/json
-      x-api-key: !secret ambee_pollen_api_key
-    json_attributes_path: data[0]
-    json_attributes:
-      - Count
-      - Risk
-      - Species
-      - updatedAt
-      - time
-
-  - platform: template
-    sensors:
-      pollen_arbres:
-        friendly_name: Pollen Arbres
-        icon_template: mdi:tree
-        value_template: >-
-          {% set state = state_attr("sensor.pollen_data", "Risk").tree_pollen %}
-          {% if state == "Low" %} Faible
-          {% elif state == "Moderate"%} Moyen
-          {% elif state == "High"%} Elevée
-          {% elif state == "Very High"%} Très élevée
-          {% else %}Inconnu{% endif %}
-        attribute_templates:
-          Total: >-
-            {{ state_attr("sensor.pollen_data", "Count").tree_pollen }} /m³
-          Aulne: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Alder }} /m³
-          Bouleau: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Birch }} /m³
-          Conifère: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Cypress }} /m³
-          Orme: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Elm }} /m³
-          Noisetier: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Hazel }} /m³
-          Chêne: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Oak }} /m³
-          Pin: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Pine }} /m³
-          Platane: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree.Plane }} /m³
-          Peuplier: >-
-            {{ state_attr("sensor.pollen_data", "Species").Tree["Poplar / Cottonwood"] }} /m³
-
-      pollen_graminees:
-        friendly_name: Pollen Graminées
-        icon_template: mdi:grass
-        value_template: >-
-          {% set state = state_attr("sensor.pollen_data", "Risk").grass_pollen %}
-          {% if state == "Low" %} Faible
-          {% elif state == "Moderate"%} Moyen
-          {% elif state == "High"%} Elevée
-          {% elif state == "Very High"%} Très élevée
-          {% else %}Inconnu{% endif %}
-        attribute_templates:
-          Total: >-
-            {{ state_attr("sensor.pollen_data", "Count").grass_pollen }} /m³
-          Graminées: >-
-            {{ state_attr("sensor.pollen_data", "Species").Grass["Grass / Poaceae"] }} /m³
-            
-      pollen_plantes:
-        friendly_name: Pollen Plantes
-        icon_template: mdi:grass
-        value_template: >-
-          {% set state = state_attr("sensor.pollen_data", "Risk").weed_pollen %}
-          {% if state == "Low" %} Faible
-          {% elif state == "Moderate"%} Moyen
-          {% elif state == "High"%} Elevée
-          {% elif state == "Very High"%} Très élevée
-          {% else %}Inconnu{% endif %}
-        attribute_templates:
-          Total: >-
-            {{ state_attr("sensor.pollen_data", "Count").weed_pollen }} /m³
-          Amaranthes/Pieds-de-coqs: >-
-            {{ state_attr("sensor.pollen_data", "Species").Weed.Chenopod }} /m³
-          Armoise: >-
-            {{ state_attr("sensor.pollen_data", "Species").Weed.Mugwort }} /m³
-          Ortie: >-
-            {{ state_attr("sensor.pollen_data", "Species").Weed.Nettle }} /m³
-          Ambrosia: >-
-            {{ state_attr("sensor.pollen_data", "Species").Weed.Ragweed }} /m³
-            
   #===============================================================================#
   #==== LUMIERES =================================================================#
   #===============================================================================#    
-  
+  # TODO
+  - platform: template
+    sensors:
       light_recap:
         friendly_name: Lumières
         icon_template: mdi:lightbulb
@@ -117,39 +14,41 @@ sensor:
                 states.light.bandeau,
                 states.light.bandeau_agathe,
                 states.light.chambre_plafond,
-                states.light.exterieur,
-                states.light.hall_couloir,
-                states.light.hue_color_lamp_1,
-                states.light.hue_go,
-                states.light.hue_go_1,
-                states.light.hue_go_like,
-                states.light.hue_lightstrip_bar,
+                states.light.entree_plafond,
+                states.light.entree_plafond_old,
+                states.light.escalier_haut,
+                states.light.hall_plafond,
+                states.light.hue_go_agathe,
+                states.light.hue_go_canape,
+                states.light.hue_go_entree,
+                states.light.hue_go_salon,
+                states.light.hue_lightstrip_hall,
                 states.light.hue_lightstrip_lit,
                 states.light.hue_lightstrip_salon_meuble,
                 states.light.hue_play_centre,
                 states.light.hue_play_droite,
                 states.light.hue_play_gauche,
-                states.light.hue_plays,
-                states.light.hue_white_lamp_1,
-                states.light.hue_white_lamp_2,
-                states.light.hue_white_lamp_3,
-                states.light.lampadaire_agathe,
-                states.light.lumiere_indirecte,
+                states.light.huego_ring,
+                states.light.lampadaire_enfants,
+                states.light.lampadaire_salon,
                 states.light.miroir_sdb_droite,
                 states.light.miroir_sdb_gauche,
                 states.light.notepad_k10_screen,
-                states.light.prises,
-                states.light.salle_a_manger,
-                states.light.salon_2,
-                states.light.sdb,
+                states.light.salle_a_manger_plafond,
+                states.light.salon_plafond,
                 states.light.wc,
-                states.light.wled,
-                states.light.wled_2,
-                states.light.wled_master,
-                states.light.wled_segment_1,
-                states.light.wled_segment_2,
+                states.light.wled_bandeau,
+                states.light.wled_ring,
+                states.light.hall_etage,
                 states.light.xiaomi_gateway_light,
-                states.light.yeelight_cuisine
+                states.light.spots_cuisine_bar,
+                states.light.spots_cuisine_evier,
+                states.light.spot_sdb_bas,
+                states.light.sdb_rdc_plafond,
+                states.light.spot_sdb_1_etage,
+                states.light.spot_sdb_2_etage,
+                states.light.spot_sdb_3_etage,
+                states.light.plafond_dressing
             ] %}
             {%- set lights_on = lights | selectattr('state','eq','on') | list %}
             {%- set lights_name = lights | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
@@ -169,15 +68,31 @@ sensor:
 
   - platform: template
     sensors:
+      calendar_next_event:
+        entity_id:
+          - calendar.goguigaut_gmail_com
+          - sensor.time
+        friendly_name: "Prochain événement calendrier"
+        value_template: >
+          {% set e = strptime(
+               states.calendar.goguigaut_gmail_com.attributes.start_time,
+               '%Y-%m-%d %H:%M:%S') %}
+          {{ e.strftime('%j')|int - now().strftime('%j')|int == 1 and now().hour >= 12 }}
+
+  - platform: template
+    sensors:
       since_last_motion:
         friendly_name: 'Minutes since last motion'
         value_template: >
           {%- set sensors = [
-            states.binary_sensor.motion_sensor_hall_entree, 
-            states.binary_sensor.motion_sensor_hall_couloir, 
-            states.binary_sensor.motion_sensor_sdb, 
-            states.binary_sensor.motion_sensor_cuisine, 
-            states.binary_sensor.mouvement_agathe_occupancy
+            states.binary_sensor.motion_wc_occupancy,
+            states.binary_sensor.motion_entree_occupancy, 
+            states.binary_sensor.motion_escalier_bas_occupancy,
+            states.binary_sensor.motion_escalier_haut_occupancy,
+            states.binary_sensor.motion_cuisine_occupancy,
+            states.binary_sensor.motion_dressing_occupancy,
+            states.binary_sensor.motion_sdb_bas_occupancy,
+            states.binary_sensor.motion_sdb_haut_occupancy
           ] %}
           {%- set filtered_sensors = sensors | selectattr('last_changed','==', sensors | map(attribute='last_changed') | max) | list %}
           {{ (( as_timestamp(now()) - as_timestamp(filtered_sensors[0].last_changed)) / 60 ) | int }}
@@ -189,14 +104,8 @@ sensor:
         icon_template: mdi:window-open-variant
         value_template: >-              
             {%- set fenetres = [
-                states.binary_sensor.door_entree,
-                states.binary_sensor.door_window_1,
-                states.binary_sensor.door_window_2,
-                states.binary_sensor.door_window_3,
-                states.binary_sensor.door_window_4,
-                states.binary_sensor.door_window_5_chambre,
-                states.binary_sensor.door_window_6_chambre,
-                states.binary_sensor.door_window_7_agathe
+                states.binary_sensor.door_entree_contact,
+                states.binary_sensor.porte_terrasse_contact
             ] %}
             {%- set fenetre_on = fenetres | selectattr('state','eq','on') | list %}
             {%- set fenetre_name = fenetres | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
@@ -262,7 +171,7 @@ sensor:
             {{ text }}
       porte_last_changed:
         value_template: >
-            {% set up_time = as_timestamp(now()) - as_timestamp(states.binary_sensor.door_entree.last_changed) %}
+            {% set up_time = as_timestamp(now()) - as_timestamp(states.binary_sensor.porte_entree_contact.last_changed) %}
             {% set days = (up_time // (60 * 60 * 24)) | int %}
             {% set weeks = (days // 7) | int %}
             {% set hours = (up_time // (60 * 60)) | int %}
@@ -395,20 +304,35 @@ sensor:
     
   - platform: prixCarburant
     stationID:
-      - 6140004
-      - 6480002
+      - 63200001 #Carrefour
+      - 63720003 #Intermarche
+
+# --- DEPRECATED  
+#  - platform: moon
+  - platform: template
+    sensors:
+      moon_phases:
+        friendly_name: 'Lune'
+        value_template: >-
+          {% set phases = {'first_quarter': 'Premier quartier', 'full_moon': 'Pleine lune',
+                           'last_quarter': 'Dernier quartier', 'new_moon': 'Nouvelle lune',
+                           'waning_crescent': 'Dernier croissant', 'waning_gibbous': 'Gibbeuse décroissante',
+                           'waxing_crescent': 'Premier croissant', 'waxing_gibbous': 'Gibbeuse croissante'} %}
+          {% set phase = states('sensor.moon') %}
+          {{ phases[phase] if phase in phases.keys() else 'Error' }}
+        entity_picture_template: /local/images/moon_phases/{{ states.sensor.moon.state }}.png
       
   - platform: template
     sensors:
       98_leclerc:
-        friendly_name: 'SP98 Leclerc'
+        friendly_name: 'SP98 Carrefour'
         value_template: >
-          {{ state_attr("sensor.prixcarburant_leclerc", "E98") }}
+          {{ state_attr("sensor.prixcarburant_carrefour", "E98") }}
         unit_of_measurement: "€"
       95_leclerc:
-        friendly_name: 'SP95 Leclerc'
+        friendly_name: 'SP95 Carrefour'
         value_template: >
-          {{ state_attr("sensor.prixcarburant_leclerc", "E95") }}
+          {{ state_attr("sensor.prixcarburant_carrefour", "E95") }}
         unit_of_measurement: "€"
     
   - platform: rest
@@ -438,10 +362,9 @@ sensor:
     headers: 
       User-Agent: Home Assistant
       Content-Type: application/json
-        
-      
-      
-  
+
+
+
   - platform: template
     sensors:
       vacances:
@@ -452,73 +375,27 @@ sensor:
             {{ states('sensor.vacances_domogeek') }}
           {%- endif %}
         friendly_name: 'Vancances' 
- 
-  #===============================================================================#
-  #==== STATS ====================================================================#
-  #===============================================================================#
-        
-  - platform: statistics
-    name: Statistic Température Xiaomi Salon
-    entity_id: sensor.temperature_salon
-  - platform: statistics
-    name: Statistic Température Xiaomi Chambre
-    entity_id: sensor.temperature_chambre
-  - platform: statistics
-    name: Statistic Température Extérieure
-    entity_id: sensor.netatmo_maison_salon_exterieur_temperature
-  - platform: statistics
-    name: Statistic Température Salon
-    entity_id: sensor.netatmo_maison_salon_temperature
-  - platform: statistics
-    name: Statistic Température Chambre
-    entity_id: sensor.netatmo_maison_salon_chambre_temperature
-  - platform: statistics
-    name: Statistic Température Agathe
-    entity_id: sensor.netatmo_maison_salon_agathe_temperature
-  - platform: statistics
-    name: Statistic Température Cuisine
-    entity_id: sensor.temperature_cuisine
-  - platform: statistics
-    name: Statistic Température SDB
-    entity_id: sensor.temperature_sdb
-  - platform: statistics
-    name: Statistic Pluie
-    entity_id: sensor.netatmo_maison_salon_pluviometre_rain_today
-  - platform: statistics
-    name: Statistic Humidité Salon
-    entity_id: sensor.humidity_salon
-  - platform: statistics
-    name: Statistic Humidité Chambre
-    entity_id: sensor.humidity_chambre
-  - platform: statistics
-    name: Statistic CO2 Salon
-    entity_id: sensor.netatmo_maison_salon_co2
-  - platform: statistics
-    name: Statistic CO2 Chambre
-    entity_id: sensor.netatmo_maison_salon_chambre_co2
-  - platform: statistics
-    name: Statistic CO2 Agathe
-    entity_id: sensor.netatmo_maison_salon_agathe_co2
-       
+
+
   #===============================================================================#
   #==== POIDS ====================================================================#
   #===============================================================================#
   
-  - platform: mqtt
-    name: "Gautier Weight"
-    state_topic: "miscale/Gautier/weight"
-    value_template: "{{ value_json['weight'] }}"
-    unit_of_measurement: "kg"
-    json_attributes_topic: "miscale/Gautier/weight"
-    icon: mdi:scale-bathroom
-  
-  - platform: mqtt
-    name: "Gautier BMI"
-    state_topic: "miscale/Gautier/weight"
-    value_template: "{{ value_json['bmi'] }}"
-    icon: mdi:human-pregnant
-    unit_of_measurement: "kg/m2"
-    
+#  - platform: mqtt
+#    name: "Gautier Weight"
+#    state_topic: "miscale/Gautier/weight"
+#    value_template: "{{ value_json['weight'] }}"
+#    unit_of_measurement: "kg"
+#    json_attributes_topic: "miscale/Gautier/weight"
+#    icon: mdi:scale-bathroom
+#  
+#  - platform: mqtt
+#    name: "Gautier BMI"
+#    state_topic: "miscale/Gautier/weight"
+#    value_template: "{{ value_json['bmi'] }}"
+#    icon: mdi:human-pregnant
+#    unit_of_measurement: "kg/m2"
+
   #===============================================================================#
   #==== ELEC =====================================================================#
   #===============================================================================#
@@ -526,27 +403,27 @@ sensor:
   - platform: template
     sensors:
       elec_current_price:
-        value_template: '{{ (states.sensor.consommation_day.state|float*0.1452)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_day.state|float*0.1680)|float|round(2) }}'  
         friendly_name: "Coût Aujourd'hui"
         unit_of_measurement: '€'
       elec_yesterday_price:
-        value_template: '{{ (states.sensor.consommation_day.attributes.last_period|float*0.1452)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_day.attributes.last_period|float*0.1680)|float|round(2) }}'  
         friendly_name: 'Coût Hier' 
         unit_of_measurement: '€'
       elec_current_week_price:
-        value_template: '{{ (states.sensor.consommation_week.state|float*0.1452)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_week.state|float*0.1680)|float|round(2) }}'  
         friendly_name: 'Coût Semaine' 
         unit_of_measurement: '€'       
       elec_current_month_price:
-        value_template: '{{ (states.sensor.consommation_month.state|float*0.1452+11)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_month.state|float*0.1680+14.16)|float|round(2) }}'  
         friendly_name: 'Coût Mois' 
         unit_of_measurement: '€'
       elec_last_month_price:
-        value_template: '{{ (states.sensor.consommation_month.attributes.last_period|float*0.1452+11)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_month.attributes.last_period|float*0.1680+14.16)|float|round(2) }}'  
         friendly_name: 'Coût Dernier Mois' 
         unit_of_measurement: '€'
       elec_current_year_price:
-        value_template: '{{ (states.sensor.consommation_year.state|float*0.1452+132)|float|round(2) }}'  
+        value_template: '{{ (states.sensor.consommation_year.state|float*0.1680+170)|float|round(2) }}'  
         friendly_name: 'Coût Année' 
         unit_of_measurement: '€'
         
@@ -661,16 +538,14 @@ sensor:
   #===============================================================================#
   #==== SYSTEME ==================================================================#
   #===============================================================================#
-  
-  - platform: uptime
-    name: Hassio Uptime
-    unit_of_measurement: minutes
+
+# -- DEPRECATED ---  
+#   - platform: uptime
+#     name: Hassio Uptime
+#     unit_of_measurement: minutes
     
   - platform: version
     source: hassio
-  
-  - platform: authenticated
-    enable_notification: false
   
   - platform: command_line
     name: Supervisor updates

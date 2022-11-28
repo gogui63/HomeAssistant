@@ -17,12 +17,16 @@ homeassistant:
   allowlist_external_dirs:
   - "/tmp"
   - /config/
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
 
 
 # logger:
 #   default: info
 #   logs:
-#       homeassistant.components.netatmo: debug
+#     homeassistant.components.netatmo: debug
+#     homeassistant.components.sensor: debug
 
 recorder:
   purge_keep_days: 15 
@@ -34,11 +38,21 @@ recorder:
     event_types: 
       - call_service
 
-mqtt:
-  broker: !secret local_ip_nuc
-  username: !secret mosquitto_username
-  password: !secret mosquitto_password
-  discovery: true
+zone:
+  # This will override the default home zone
+  - name: Home
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+    radius: 80
+    icon: mdi:home
+
+# mqtt:
+#   broker: !secret local_ip_nuc
+#   username: !secret mosquitto_username
+#   password: !secret mosquitto_password
+#   discovery: true
+
+  
 
 influxdb:
   host: a0d7b954-influxdb
@@ -53,8 +67,6 @@ influxdb:
       - sensor.gautier_weight
       - sensor.manon_weight
       - sensor.netatmo_maison_salon_pluviometre_rain_today
-      - climate.clim_salon
-      - climate.clim_chambre
     entity_globs:
       - sensor.*temperature*
       - sensor.enedis*
@@ -81,12 +93,23 @@ tts:
     gender: female
     speed: 0.75
     voice: fr-FR-Wavenet-A
+  
 
-device_tracker:
-  - platform: mqtt
+proximity:
+  home_gautier:
+    ignored_zones:
+      - travail_gautier
+      - travail_manon
     devices:
-      nut_manon_monitor: 'presence/debian/nut_manon_monitor/device_tracker'
-      nut_gautier_monitor: 'presence/debian/nut_gautier_monitor/device_tracker'
+      - person.gautier
+    tolerance: 50
+  home_manon:
+    ignored_zones:
+      - travail_gautier
+      - travail_manon
+    devices:
+      - person.manon
+    tolerance: 50
 
 telegram_bot:
   - platform: webhooks
@@ -107,13 +130,13 @@ notify:
     name: discord
     token: !secret discord_bot_token
 
-media_player:
-  - platform: androidtv
-    name: "Shield-AndroidTV"
-    host: !secret local_ip_shield
-  - platform: androidtv
-    name: "videoprojecteur-AndroidTV"
-    host: !secret local_ip_videoprojecteur
+#media_player:
+#  - platform: androidtv
+#    name: "Shield-AndroidTV"
+#    host: !secret local_ip_shield
+#  - platform: androidtv
+#    name: "videoprojecteur-AndroidTV"
+#    host: !secret local_ip_videoprojecteur
 
 xiaomi_aqara:
   discovery_retry: 10
@@ -126,29 +149,26 @@ netatmo:
   client_id: !secret netatmo_client_id
   client_secret: !secret netatmo_client_secret
 
-
 shelly:
   discovery: true
   sensors:
     - all 
+    
+smartir:
 
-spotify:
-  client_id: !secret spotify_client_id
-  client_secret: !secret spotify_client_secret
+climate:
+  - platform: smartir
+    name: Climatisation
+    unique_id: climatisation
+    device_code: 1940
+    controller_data: remote.broadlink_remote
+    temperature_sensor: sensor.netatmo_maison_salon_temperature
+    humidity_sensor: sensor.netatmo_maison_salon_humidity
+    #power_sensor: binary_sensor.ac_power
 
 spotcast:
   sp_dc: !secret spotcast_sp_dc
   sp_key: !secret spotcast_sp_key
-
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-  project_id: !secret nest_project_id
-  subscriber_id: !secret nest_subscriber_id
-
-google:
-  client_id: !secret google_client_id
-  client_secret: !secret google_client_secret
 
 weather:
   - platform: darksky

@@ -63,32 +63,26 @@ input_boolean:
   guest_mode:
     name: Mode invité
     initial: off
-  get_allergies_data:
-    name: Rafraichir allergies
-    initial: off
-  reset_allergies_sensor:
-    name: Reset allergies
-    initial: off
-    
+
 input_number:
   clim_chauffage_consigne_min:
     name: Consigne minimum clim chauffage
     icon: mdi:thermometer-minus
     min: 18
     max: 28
-    step: 0.5
+    step: 0.25
   clim_chauffage_consigne_max:
     name: Consigne maximum clim chauffage
     icon: mdi:thermometer-plus
     min: 18
     max: 28
-    step: 0.5
+    step: 0.25
   clim_chauffage_consigne_temp:
     name: Consigne température clim chauffage
     icon: mdi:home-thermometer
     min: 18
     max: 28
-    step: 0.5
+    step: 1
   statistics_salon_temperature_max:
     name: Température max Salon
     icon: mdi:thermometer-plus
@@ -117,3 +111,64 @@ input_number:
     max: 99
     step: 0.1
     unit_of_measurement: °C
+  statistics_chambre_temperature_max:
+    name: Température max Chambre
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_chambre_temperature_min:
+    name: Température min Chambre
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_agathe_temperature_max:
+    name: Température max Agathe
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_agathe_temperature_min:
+    name: Température min Agathe
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_sdb_temperature_max:
+    name: Température max SDB
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_sdb_temperature_min:
+    name: Température min SDB
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_bureau_temperature_max:
+    name: Température max Bureau
+    icon: mdi:thermometer-plus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+  statistics_bureau_temperature_min:
+    name: Température min Bureau
+    icon: mdi:thermometer-minus
+    min: -99
+    max: 99
+    step: 0.1
+    unit_of_measurement: °C
+
+input_button:
+  power_toggle_shield:
+    name: Power Toggle Shield
+    icon: mdi:power

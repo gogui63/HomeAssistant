@@ -20,6 +20,7 @@ views:
                     ha-card {
                       background-color: transparent !important;
                       box-shadow: none !important;
+                      text-align: center
                     }
                   ha-markdown:
                     $: |
@@ -78,7 +79,7 @@ views:
                     letter-spacing: '-0.01em';
                   }
           - type: custom:weather-card
-            entity: weather.vence
+            entity: weather.riom
             number_of_forecasts: '5'
             current: true
             details: true
@@ -106,8 +107,9 @@ views:
               Coût éléctricité hier : **{{ states('sensor.elec_yesterday_price')
               }} €**
 
-              {% if states("sensor.pollen_level") | int != 0 -%} Pollen :
-              **{{states('sensor.pollen_level') }}/5** {%- endif %} 
+              {% if states("sensor.pollens_63") != "nul" -%} Pollen :
+              **{{states('sensor.pollens_63')[0]|upper}}{{states('sensor.pollens_63')[1:]}}**
+              {%- endif %} 
 
 
               {{ states('sensor.savoir_scrape') }}
@@ -463,8 +465,8 @@ views:
                           - entity: input_boolean.presence
                             name: Presence
                             toggle: true
-                          - entity: input_boolean.guest_mode
-                            name: Invités
+                          - entity: input_boolean.is_jour
+                            name: Jour
                             toggle: true
                           - entity: input_boolean.holidays
                             name: Vacances
@@ -505,7 +507,7 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - type: custom:weather-card
-                    entity: weather.maison
+                    entity: weather.forecast_riom
                     number_of_forecasts: '5'
                     current: false
                     details: false
@@ -544,9 +546,9 @@ views:
                     type: custom:button-card
                   - type: entities
                     entities:
-                      - entity: sensor.prixcarburant_leclerc
+                      - entity: sensor.prixcarburant_carrefour
                         type: custom:multiple-entity-row
-                        name: Leclerc
+                        name: Carrefour
                         show_state: false
                         icon: mdi:gas-station
                         entities:
@@ -609,7 +611,11 @@ views:
                                   exclude:
                                     - state: 'off'
                                     - state: unavailable
+                                    - attributes:
+                                        is_hue_group: true
+                                    - name: Lights *
                                 show_empty: false
+                                unique: true
                                 card:
                                   type: custom:fold-entity-row
                                   head:
@@ -675,7 +681,7 @@ views:
                     - width: 5px
                 type: custom:button-card
               - type: custom:slider-button-card
-                entity: cover.volet_salon
+                entity: cover.salon_1
                 slider:
                   direction: top-bottom
                   background: striped
@@ -691,9 +697,9 @@ views:
                   mode: custom
                   icon: mdi:swap-vertical
                 compact: false
-                show_state: true
+                show_state: false
               - type: custom:slider-button-card
-                entity: cover.volet_chambre
+                entity: cover.salon_2
                 slider:
                   direction: top-bottom
                   background: striped
@@ -709,9 +715,9 @@ views:
                   mode: custom
                   icon: mdi:swap-vertical
                 compact: false
-                show_state: true
+                show_state: false
               - type: custom:slider-button-card
-                entity: cover.volet_gedeon
+                entity: cover.cuisine
                 slider:
                   direction: top-bottom
                   background: striped
@@ -727,7 +733,25 @@ views:
                   mode: custom
                   icon: mdi:swap-vertical
                 compact: false
-                show_state: true
+                show_state: false
+              - type: custom:slider-button-card
+                entity: cover.bureau
+                slider:
+                  direction: top-bottom
+                  background: striped
+                icon:
+                  show: true
+                  tap_action:
+                    action: more-info
+                  icon: ''
+                  use_state_color: false
+                action_button:
+                  tap_action:
+                    action: toggle
+                  mode: custom
+                  icon: mdi:swap-vertical
+                compact: false
+                show_state: false
               - color_type: blank-card
                 icon: mdi:led-strip-variant
                 styles:
@@ -761,7 +785,8 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - type: custom:slider-button-card
-                    entity: light.salon
+                    entity: light.lights_salon
+                    name: Salon
                     slider:
                       direction: left-right
                       background: gradient
@@ -774,7 +799,8 @@ views:
                       tap_action:
                         action: toggle
                   - type: custom:slider-button-card
-                    entity: light.chambre
+                    entity: light.lights_chambre
+                    name: Chambre
                     slider:
                       direction: left-right
                       background: gradient
@@ -787,7 +813,7 @@ views:
                       tap_action:
                         action: toggle
                   - type: custom:slider-button-card
-                    entity: light.chambre_agathe
+                    entity: light.lights_chambre_agathe
                     name: Agathe
                     slider:
                       direction: left-right
@@ -813,7 +839,8 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - type: custom:slider-button-card
-                    entity: light.cuisine
+                    entity: light.lights_cuisine
+                    name: Cuisine
                     slider:
                       direction: left-right
                       background: gradient
@@ -826,7 +853,8 @@ views:
                       tap_action:
                         action: toggle
                   - type: custom:slider-button-card
-                    entity: light.hall
+                    entity: light.lights_entree
+                    name: Entrée
                     slider:
                       direction: left-right
                       background: gradient
@@ -839,14 +867,14 @@ views:
                       tap_action:
                         action: toggle
                   - type: custom:slider-button-card
-                    entity: light.sdb
-                    name: SDB
+                    entity: light.lights_escalier
+                    name: Escalier
                     slider:
                       direction: left-right
                       background: gradient
                       use_state_color: true
                     icon:
-                      icon: mdi:shower
+                      icon: mdi:stairs
                     action_button:
                       mode: custom
                       show: true
@@ -901,7 +929,7 @@ views:
                       icon: ''
                     name: Indirecte
                   - type: custom:slider-button-card
-                    entity: light.wled
+                    entity: light.wled_group
                     slider:
                       direction: left-right
                       background: gradient
@@ -914,7 +942,7 @@ views:
                       tap_action:
                         action: toggle
                   - type: custom:slider-button-card
-                    entity: light.espace_de_loisirs_hue_play
+                    entity: light.hue_plays_group
                     slider:
                       direction: left-right
                       background: gradient
@@ -933,7 +961,8 @@ views:
                     type: custom:button-card
             type: vertical-stack
         type: vertical-stack
-  - icon: mdi:thermometer
+  - theme: Backend-selected
+    icon: mdi:thermometer
     badges: []
     cards:
       - cards:
@@ -1010,7 +1039,7 @@ views:
                       - align-self: end
                       - justify-self: start
                       - font-size: 80%
-                      - margin-left: 10%
+                      - margin-left: 5%
                       - color: lightgray
                     max:
                       - align-self: end
@@ -1044,20 +1073,20 @@ views:
                         labels: false
                   min: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_salon'].attributes.min_value}°C</span>`
+                      return `<span>${states['input_number.statistics_salon_temperature_min'].state}°C</span>`
                     ]]]
                   max: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_salon'].attributes.max_value}°C</span>`
+                      return `<span>${states['input_number.statistics_salon_temperature_max'].state}°C</span>`
                     ]]]
                   state: |
                     [[[
-                      return `<a style="font-size: 160%; color: white">${states['sensor.statistic_temperature_salon'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
                     ]]]
               - type: custom:button-card
-                entity: sensor.temperature_cuisine
-                name: Cuisine
-                icon: hue:room-kitchen
+                entity: sensor.netatmo_maison_salon_bureau_temperature
+                name: Bureau
+                icon: mdi:desk
                 aspect_ratio: 1/1
                 show_icon: true
                 show_name: true
@@ -1103,7 +1132,7 @@ views:
                       - align-self: end
                       - justify-self: start
                       - font-size: 80%
-                      - margin-left: 10%
+                      - margin-left: 5%
                       - color: lightgray
                     max:
                       - align-self: end
@@ -1121,7 +1150,7 @@ views:
                     card:
                       type: custom:mini-graph-card
                       entities:
-                        - sensor.temperature_cuisine
+                        - sensor.netatmo_maison_salon_bureau_temperature
                       height: 150
                       line_width: 10
                       lower_bound: 18
@@ -1137,15 +1166,15 @@ views:
                         labels: false
                   min: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_cuisine'].attributes.min_value}°C</span>`
+                      return `<span>${states['input_number.statistics_bureau_temperature_min'].state}°C</span>`
                     ]]]
                   max: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_cuisine'].attributes.max_value}°C</span>`
+                      return `<span>${states['input_number.statistics_bureau_temperature_max'].state}°C</span>`
                     ]]]
                   state: |
                     [[[
-                      return `<a style="font-size: 160%; color: white">${states['sensor.temperature_cuisine'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
+                      return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_bureau_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
                     ]]]
               - color_type: blank-card
                 styles:
@@ -1208,7 +1237,7 @@ views:
                       - align-self: end
                       - justify-self: start
                       - font-size: 80%
-                      - margin-left: 10%
+                      - margin-left: 5%
                       - color: lightgray
                     max:
                       - align-self: end
@@ -1242,11 +1271,11 @@ views:
                         labels: false
                   min: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_chambre'].attributes.min_value}°C</span>`
+                      return `<span>${states['input_number.statistics_chambre_temperature_min'].state}°C</span>`
                     ]]]
                   max: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_chambre'].attributes.max_value}°C</span>`
+                      return `<span>${states['input_number.statistics_chambre_temperature_max'].state}°C</span>`
                     ]]]
                   state: |
                     [[[
@@ -1301,7 +1330,7 @@ views:
                       - align-self: end
                       - justify-self: start
                       - font-size: 80%
-                      - margin-left: 10%
+                      - margin-left: 5%
                       - color: lightgray
                     max:
                       - align-self: end
@@ -1335,11 +1364,11 @@ views:
                         labels: false
                   min: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_agathe'].attributes.min_value}°C</span>`
+                      return `<span>${states['input_number.statistics_agathe_temperature_min'].state}°C</span>`
                     ]]]
                   max: |
                     [[[
-                      return `<span>${states['sensor.statistic_temperature_agathe'].attributes.max_value}°C</span>`
+                      return `<span>${states['input_number.statistics_agathe_temperature_max'].state}°C</span>`
                     ]]]
                   state: |
                     [[[
@@ -1350,210 +1379,6 @@ views:
                   card:
                     - width: 5px
                 type: custom:button-card
-          - cards:
-              - content: |
-                  # Extérieur
-                style:
-                  .: |
-                    ha-card {
-                      background-color: transparent !important;
-                      box-shadow: none !important;
-                    }
-                  ha-markdown:
-                    $: |
-                      h1 {
-                        font-size: 25px;
-                       # font-weight: bold;
-                        text-align: center;
-                        letter-spacing: '-0.01em';
-                      }
-                type: markdown
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_exterieur_temperature
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: hue:room-outdoors
-                    name: Extérieur
-                    show:
-                      fill: false
-                      legend: false
-                    type: custom:mini-graph-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_pluviometre_rain_today
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: mdi:weather-pouring
-                    name: Pluie
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_anemometre_wind_strength
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: mdi:weather-windy
-                    name: Vent
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-            type: vertical-stack
-          - cards:
-              - content: |
-                  # Humidité
-                style:
-                  .: |
-                    ha-card {
-                      background-color: transparent !important;
-                      box-shadow: none !important;
-                    }
-                  ha-markdown:
-                    $: |
-                      h1 {
-                        font-size: 25px;
-                       # font-weight: bold;
-                        text-align: center;
-                        letter-spacing: '-0.01em';
-                      }
-                type: markdown
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_humidity
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: hue:room-living
-                    name: Salon
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_exterieur_humidity
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: hue:room-outdoors
-                    name: Extérieur
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_chambre_humidity
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: mdi:bed-double
-                    name: Chambre
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - align_icon: left
-                    align_state: center
-                    entities:
-                      - sensor.netatmo_maison_salon_agathe_humidity
-                    font_size: 75
-                    height: 150
-                    line_width: 10
-                    points_per_hour: 1
-                    hours_to_show: 24
-                    hour24: true
-                    icon: hue:room-kids
-                    name: Agathe
-                    show:
-                      fill: false
-                    type: custom:mini-graph-card
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-            type: vertical-stack
         type: vertical-stack
       - cards:
           - content: |
@@ -1581,10 +1406,10 @@ views:
                     - width: 5px
                 type: custom:button-card
               - type: thermostat
-                entity: climate.clim_salon
+                entity: climate.rdc
                 name: Salon
               - type: thermostat
-                entity: climate.clim_chambre
+                entity: climate.etage
                 name: Chambre
               - color_type: blank-card
                 styles:
@@ -1600,7 +1425,7 @@ views:
                 type: custom:button-card
               - type: entities
                 entities:
-                  - entity: sensor.temperature_salon
+                  - entity: sensor.temperature_ble_salon
                     name: Température actuelle
                     secondary_info: last-updated
                   - entity: input_number.clim_chauffage_consigne_temp
@@ -1609,10 +1434,203 @@ views:
                     name: Maximum
                   - entity: input_number.clim_chauffage_consigne_min
                     name: Minumum
-                  - entity: automation.temperature_gestion_clim_chauffage_auto
+                  - entity: >-
+                      automation.temperature_gestion_clim_chauffage_auto_dupliquer
                     icon: mdi:thermostat
                     name: Gestion auto
                     secondary_info: last-triggered
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: |
+              # Extérieur
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_exterieur_temperature
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-outdoors
+                name: Extérieur
+                show:
+                  fill: false
+                  legend: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_pluviometre_rain_today
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:weather-pouring
+                name: Pluie
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_anemometre_wind_strength
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:weather-windy
+                name: Vent
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+        type: vertical-stack
+      - cards:
+          - content: |
+              # Humidité
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-living
+                name: Salon
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_exterieur_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-outdoors
+                name: Extérieur
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_chambre_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: mdi:bed-double
+                name: Chambre
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - align_icon: left
+                align_state: center
+                entities:
+                  - sensor.netatmo_maison_salon_agathe_humidity
+                font_size: 75
+                height: 150
+                line_width: 10
+                points_per_hour: 1
+                hours_to_show: 24
+                hour24: true
+                icon: hue:room-kids
+                name: Agathe
+                show:
+                  fill: false
+                type: custom:mini-graph-card
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
               - color_type: blank-card
                 styles:
                   card:
@@ -1636,9 +1654,9 @@ views:
 
               {{ states('sensor.fenetre_recap') }}
 
-              {% if is_state("binary_sensor.door_entree", "on") -%}  Porte
-              ouverte depuis **{{ states('sensor.porte_last_changed') }}** {%-
-              else -%}  Porte fermée depuis **{{
+              {% if is_state("binary_sensor.porte_entree_contact", "on") -%} 
+              Porte ouverte depuis **{{ states('sensor.porte_last_changed') }}**
+              {%- else -%}  Porte fermée depuis **{{
               states('sensor.porte_last_changed') }}** {%- endif %}
 
               {% if is_state("person.gautier", "home") -%} Gautier est à la
@@ -1713,13 +1731,13 @@ views:
                       card:
                         - width: 5px
                     type: custom:button-card
-                  - entity: camera.foscam_camera
-                    show_name: false
+                  - show_name: false
                     show_state: false
                     type: picture-entity
-                    camera_image: camera.foscam_camera
+                    camera_image: camera.salon_sd
                     camera_view: live
                     aspect_ratio: 48%
+                    entity: camera.salon_hd
                   - color_type: blank-card
                     styles:
                       card:
@@ -1732,13 +1750,13 @@ views:
                       card:
                         - width: 5px
                     type: custom:button-card
-                  - entity: camera.yihome
+                  - show_state: false
                     show_name: false
-                    show_state: false
-                    type: picture-entity
-                    camera_image: camera.yihome
                     camera_view: live
+                    type: picture-entity
+                    camera_image: camera.chambre_agathe_sd
                     aspect_ratio: 48%
+                    entity: camera.chambre_agathe_hd
                   - color_type: blank-card
                     styles:
                       card:
@@ -1755,7 +1773,6 @@ views:
                     show_name: false
                     show_state: false
                     type: picture-entity
-                    camera_image: camera.netatmo_welcom
                     camera_view: live
                     aspect_ratio: 48%
                   - color_type: blank-card
@@ -1828,9 +1845,9 @@ views:
                 name: ' '
               - type: glance
                 entities:
-                  - entity: device_tracker.nut_gautier_monitor
+                  - entity: device_tracker.nut_gautier
                     name: Gautier
-                  - entity: device_tracker.nut_manon_monitor
+                  - entity: device_tracker.nut_manon
                     name: Manon
               - color_type: blank-card
                 styles:
@@ -1887,7 +1904,7 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - entities:
-                      - entity: binary_sensor.motion_sensor_hall_entree
+                      - entity: binary_sensor.motion_entree_occupancy
                         name: Entrée
                     show_header_toggle: false
                     show_state: true
@@ -1899,8 +1916,8 @@ views:
                     title: false
                     type: glance
                   - entities:
-                      - entity: binary_sensor.motion_sensor_hall_couloir
-                        name: Couloir
+                      - entity: binary_sensor.motion_escalier_bas_occupancy
+                        name: Escalier Bas
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -1911,8 +1928,8 @@ views:
                     title: false
                     type: glance
                   - entities:
-                      - entity: binary_sensor.motion_sensor_cuisine
-                        name: Cuisine
+                      - entity: binary_sensor.motion_escalier_haut_occupancy
+                        name: Escalier Haut
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -1935,8 +1952,8 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - entities:
-                      - entity: binary_sensor.motion_sensor_sdb
-                        name: SDB
+                      - entity: binary_sensor.motion_sdb_haut_occupancy
+                        name: SDB Étage
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -1947,9 +1964,8 @@ views:
                     title: false
                     type: glance
                   - entities:
-                      - entity: binary_sensor.vibration_scooter
-                        name: Scooter
-                        icon: mdi:motorbike
+                      - entity: binary_sensor.motion_sdb_bas_occupancy
+                        name: SDB RdC
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -1960,8 +1976,8 @@ views:
                     title: false
                     type: glance
                   - entities:
-                      - entity: binary_sensor.mouvement_agathe_occupancy
-                        name: Agathe
+                      - entity: binary_sensor.motion_cuisine_occupancy
+                        name: Cuisine
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -2002,40 +2018,10 @@ views:
                         - width: 5px
                     type: custom:button-card
                   - entities:
-                      - entity: binary_sensor.door_entree
+                      - entity: binary_sensor.porte_entree_contact
                         name: Entrée
-                      - entity: binary_sensor.door_window_5_chambre
-                        name: Chambre 1
-                      - entity: binary_sensor.door_window_6_chambre
-                        name: Chambre 2
-                      - entity: binary_sensor.door_window_7_agathe
-                        name: Agathe
-                    show_header_toggle: false
-                    show_state: true
-                    show_name: true
-                    style: |
-                      ha-card {
-                        text-align: center;
-                            }    
-                    title: false
-                    type: glance
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-              - type: horizontal-stack
-                cards:
-                  - color_type: blank-card
-                    styles:
-                      card:
-                        - width: 5px
-                    type: custom:button-card
-                  - entities:
-                      - entity: binary_sensor.door_window_1
-                      - entity: binary_sensor.door_window_2
-                      - entity: binary_sensor.door_window_3
-                      - entity: binary_sensor.door_window_4
+                      - entity: binary_sensor.porte_terrasse_contact
+                        name: Terasse
                     show_header_toggle: false
                     show_state: true
                     show_name: true
@@ -2529,7 +2515,7 @@ views:
                         color: 0c60fa
                       - value: 30
                         color: orange
-                      - value: 31
+                      - value: 37
                         color: red
                   - entity: sensor.netatmo_maison_salon_exterieur_temperature
                     name: Température
@@ -2797,7 +2783,7 @@ views:
                     title: false
                     type: glance
                   - entities:
-                      - entity: sensor.vacuum_total_cleaned_area
+                      - entity: sensor.xiaomi_vacuum_cleaner_last_clean_area
                         name: Surface
                     show_header_toggle: false
                     show_state: true
@@ -2835,10 +2821,10 @@ views:
                       - type: custom:fold-entity-row
                         head: vacuum.xiaomi_vacuum_cleaner
                         entities:
-                          - sensor.vacuum_filter_left
-                          - sensor.vacuum_main_brush_left
-                          - sensor.vacuum_side_brush_left
-                          - sensor.vacuum_sensor_dirty_left
+                          - sensor.xiaomi_vacuum_cleaner_filter_left
+                          - sensor.xiaomi_vacuum_cleaner_main_brush_left
+                          - sensor.xiaomi_vacuum_cleaner_side_brush_left
+                          - sensor.xiaomi_vacuum_cleaner_sensor_dirty_left
                     type: entities
                     state_color: false
                     show_header_toggle: true
@@ -2997,6 +2983,21 @@ views:
                     - width: 5px
                 type: custom:button-card
               - entity: media_player.agathe
+                type: media-control
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                icon: mdi:led-strip-variant
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - entity: media_player.sdb
                 type: media-control
               - color_type: blank-card
                 styles:
@@ -3302,6 +3303,145 @@ views:
                         - width: 5px
                     type: custom:button-card
             type: vertical-stack
+        type: vertical-stack
+  - title: ''
+    path: media
+    icon: mdi:television-classic
+    badges: []
+    cards:
+      - cards:
+          - cards:
+              - content: >
+                  # <img width="30" height="30" src='/local/images/vaccum.png'
+                  style='vertical-align:middle' /> TV
+                style:
+                  .: |
+                    ha-card {
+                      background-color: transparent !important;
+                      box-shadow: none !important;
+                    }
+                  ha-markdown:
+                    $: |
+                      h1 {
+                        font-size: 25px;
+                       # font-weight: bold;
+                        text-align: center;
+                        letter-spacing: '-0.01em';
+                      }
+                type: markdown
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: media-control
+                    entity: media_player.shield_androidtv
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - type: media-control
+                    entity: media_player.video_projecteur_2
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+              - type: horizontal-stack
+                cards:
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: call-service
+                      service: androidtv.adb_command
+                      service_data:
+                        command: POWER
+                      target:
+                        entity_id: media_player.shield_androidtv
+                    show_state: false
+                    icon: mdi:power
+                    icon_height: 30px
+                    name: Shield
+                  - type: button
+                    entity: light.hyperhdr_group
+                    name: HyperHDR
+                    show_state: false
+                    icon_height: 30px
+                  - show_name: true
+                    show_icon: true
+                    type: button
+                    tap_action:
+                      action: call-service
+                      service: cover.set_cover_tilt_position
+                      service_data:
+                        tilt_position: 70
+                      target:
+                        entity_id: cover.volet_salon
+                    entity: cover.volets
+                    show_state: false
+                    icon_height: 30px
+                  - color_type: blank-card
+                    styles:
+                      card:
+                        - width: 5px
+                    type: custom:button-card
+            type: vertical-stack
+        type: vertical-stack
+      - cards:
+          - content: >
+              # <img width="30" height="30" src='/local/images/vaccum.png'
+              style='vertical-align:middle' /> Spotify
+            style:
+              .: |
+                ha-card {
+                  background-color: transparent !important;
+                  box-shadow: none !important;
+                }
+              ha-markdown:
+                $: |
+                  h1 {
+                    font-size: 25px;
+                   # font-weight: bold;
+                    text-align: center;
+                    letter-spacing: '-0.01em';
+                  }
+            type: markdown
+          - type: horizontal-stack
+            cards:
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
+              - type: custom:spotify-card
+                limit: 10
+                spotify_entity: media_player.spotify_gautier63
+                playlist_type: default
+                account: default
+                always_play_random_song: true
+                display_style: list
+                hide_top_header: true
+              - color_type: blank-card
+                styles:
+                  card:
+                    - width: 5px
+                type: custom:button-card
         type: vertical-stack
   - title: test
     path: test
@@ -3818,586 +3958,18 @@ views:
           points: true
           labels: false
           graph: bar
-      - type: horizontal-stack
-        cards:
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_temperature
-            name: Salon
-            icon: hue:room-living
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: false
-            show_label: true
-            styles:
-              grid:
-                - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
-                - grid-template-columns: 1fr 1fr
-                - grid-template-rows: 20% 40% 35% 5%
-              icon:
-                - margin-left: '-30%'
-                - align-self: middle
-                - justify-self: middle
-              name:
-                - font-size: 130%
-                - align-self: middle
-                - justify-self: middle
-                - color: lightgray
-              state:
-                - font-size: 160%
-                - justify-self: end
-                - margin-top: 10%
-                - margin-bottom: 0px
-                - align-self: middle
-              label:
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - align-self: middle
-                  - justify-self: middle
-                  - margin-top: '-15%'
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - align-self: end
-                  - justify-self: start
-                  - font-size: 80%
-                  - margin-left: 10%
-                  - color: lightgray
-                max:
-                  - align-self: end
-                  - justify-self: end
-                  - margin-right: 10%
-                  - font-size: 80%
-                  - color: lightgray
-                state:
-                  - justify-self: middle
-                  - margin-top: 10%
-                  - margin-bottom: 0px
-                  - align-self: middle
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: fade
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_salon'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_salon'].attributes.max_value}°C</span>`
-                ]]]
-              state: |
-                [[[
-                  return `<a style="font-size: 160%; color: white">${states['sensor.statistic_temperature_salon'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
-                ]]]
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_chambre_temperature
-            name: Chambre
-            icon: hue:room-bedroom
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: false
-            show_label: true
-            styles:
-              grid:
-                - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
-                - grid-template-columns: 1fr 1fr
-                - grid-template-rows: 20% 40% 35% 5%
-              icon:
-                - margin-left: '-30%'
-                - align-self: middle
-                - justify-self: middle
-              name:
-                - font-size: 130%
-                - align-self: middle
-                - justify-self: middle
-                - color: lightgray
-              state:
-                - font-size: 160%
-                - justify-self: end
-                - margin-top: 10%
-                - margin-bottom: 0px
-                - align-self: middle
-              label:
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - align-self: middle
-                  - justify-self: middle
-                  - margin-top: '-15%'
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - align-self: end
-                  - justify-self: start
-                  - font-size: 80%
-                  - margin-left: 10%
-                  - color: lightgray
-                max:
-                  - align-self: end
-                  - justify-self: end
-                  - margin-right: 10%
-                  - font-size: 80%
-                  - color: lightgray
-                state:
-                  - justify-self: middle
-                  - margin-top: 10%
-                  - margin-bottom: 0px
-                  - align-self: middle
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_chambre_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: fade
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_chambre'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_chambre'].attributes.max_value}°C</span>`
-                ]]]
-              state: |
-                [[[
-                  return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_chambre_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
-                ]]]
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-      - type: horizontal-stack
-        cards:
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_temperature
-            name: Salon
-            icon: hue:room-living
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: false
-            show_label: true
-            styles:
-              grid:
-                - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
-                - grid-template-columns: 1fr 1fr
-                - grid-template-rows: 20% 40% 35% 5%
-              icon:
-                - margin-left: '-30%'
-                - align-self: middle
-                - justify-self: middle
-              name:
-                - font-size: 130%
-                - align-self: middle
-                - justify-self: middle
-                - color: lightgray
-              state:
-                - font-size: 160%
-                - justify-self: end
-                - margin-top: 10%
-                - margin-bottom: 0px
-                - align-self: middle
-              label:
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - align-self: middle
-                  - justify-self: middle
-                  - margin-top: '-15%'
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - align-self: end
-                  - justify-self: start
-                  - font-size: 80%
-                  - margin-left: 10%
-                  - color: lightgray
-                max:
-                  - align-self: end
-                  - justify-self: end
-                  - margin-right: 10%
-                  - font-size: 80%
-                  - color: lightgray
-                state:
-                  - justify-self: middle
-                  - margin-top: 10%
-                  - margin-bottom: 0px
-                  - align-self: middle
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: fade
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_salon'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_salon'].attributes.max_value}°C</span>`
-                ]]]
-              state: |
-                [[[
-                  return `<a style="font-size: 160%; color: white">${states['sensor.statistic_temperature_salon'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
-                ]]]
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_agathe_temperature
-            name: Agathe
-            icon: hue:room-kids
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: false
-            show_label: true
-            styles:
-              grid:
-                - grid-template-areas: '"i n" "state state" "graph graph" "min max"'
-                - grid-template-columns: 1fr 1fr
-                - grid-template-rows: 20% 40% 35% 5%
-              icon:
-                - margin-left: '-30%'
-                - align-self: middle
-                - justify-self: middle
-              name:
-                - font-size: 130%
-                - align-self: middle
-                - justify-self: middle
-                - color: lightgray
-              state:
-                - font-size: 160%
-                - justify-self: end
-                - margin-top: 10%
-                - margin-bottom: 0px
-                - align-self: middle
-              label:
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - align-self: middle
-                  - justify-self: middle
-                  - margin-top: '-15%'
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - align-self: end
-                  - justify-self: start
-                  - font-size: 80%
-                  - margin-left: 10%
-                  - color: lightgray
-                max:
-                  - align-self: end
-                  - justify-self: end
-                  - margin-right: 10%
-                  - font-size: 80%
-                  - color: lightgray
-                state:
-                  - justify-self: middle
-                  - margin-top: 10%
-                  - margin-bottom: 0px
-                  - align-self: middle
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_agathe_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: fade
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_agathe'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<span>${states['sensor.statistic_temperature_agathe'].attributes.max_value}°C</span>`
-                ]]]
-              state: |
-                [[[
-                  return `<a style="font-size: 160%; color: white">${states['sensor.netatmo_maison_salon_agathe_temperature'].state}</a><a style="font-size: 100%; color: lightgray"> °C</a>`
-                ]]]
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-      - type: horizontal-stack
-        cards:
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_agathe_temperature
-            name: Agathe
-            icon: hue:room-kids
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: true
-            show_label: true
-            styles:
-              icon:
-                - top: '-25%'
-                - left: '-20%'
-                - width: 30%
-                - position: relative
-                - color: white
-              name:
-                - bottom: 385%
-                - left: 50%
-                - position: relative
-                - font-size: 120%
-                - color: lightgray
-              state:
-                - top: 40%
-                - left: 30%
-                - font-size: 140%
-                - position: absolute
-              label:
-                - top: 75%
-                - left: 10%
-                - position: absolute
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - position: absolute
-                  - top: 70%
-                  - left: 50%
-                  - width: 100%
-                  - transform: translate(-50%, calc(-50% + 10px))
-                  - z-index: 12
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - top: 0%
-                  - left: '-230%'
-                  - position: relative
-                  - font-size: 70%
-                  - color: lightgray
-                max:
-                  - top: 0%
-                  - left: '-20%'
-                  - position: relative
-                  - font-size: 70%
-                  - color: lightgray
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_agathe_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: false
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<ha-icon
-                    style="width: 12px; height: 12px; color: lightgray;">
-                    </ha-icon><span>${states['sensor.statistic_temperature_agathe'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<ha-icon
-                    style="width: 12px; height: 12px; color: lightgray;">
-                    </ha-icon><span>${states['sensor.statistic_temperature_agathe'].attributes.max_value}°C</span>`
-                ]]]
-          - type: custom:button-card
-            entity: sensor.netatmo_maison_salon_agathe_temperature
-            name: Agathe
-            icon: hue:room-kids
-            aspect_ratio: 1/1
-            show_icon: true
-            show_name: true
-            show_state: true
-            show_label: true
-            styles:
-              icon:
-                - top: '-25%'
-                - left: '-20%'
-                - width: 30%
-                - position: relative
-                - color: white
-              name:
-                - bottom: 385%
-                - left: 50%
-                - position: relative
-                - font-size: 120%
-                - color: lightgray
-              state:
-                - top: 40%
-                - left: 30%
-                - font-size: 140%
-                - position: absolute
-              label:
-                - top: 75%
-                - left: 10%
-                - position: absolute
-                - font-weight: bold
-                - font-size: 80%
-              card:
-                - font-size: 110%
-              custom_fields:
-                graph:
-                  - position: absolute
-                  - top: 70%
-                  - left: 50%
-                  - width: 100%
-                  - transform: translate(-50%, calc(-50% + 10px))
-                  - z-index: 12
-                  - '--paper-card-background-color': rgba(0, 0, 0, 0)
-                  - '--ha-card-background': rgba(0, 0, 0, 0)"
-                  - '--ha-card-box-shadow': none
-                  - pointer-events: none
-                min:
-                  - top: 0%
-                  - left: '-230%'
-                  - position: relative
-                  - font-size: 70%
-                  - color: lightgray
-                max:
-                  - top: 0%
-                  - left: '-20%'
-                  - position: relative
-                  - font-size: 70%
-                  - color: lightgray
-            custom_fields:
-              graph:
-                card:
-                  type: custom:mini-graph-card
-                  entities:
-                    - sensor.netatmo_maison_salon_agathe_temperature
-                  height: 150
-                  line_width: 10
-                  lower_bound: 18
-                  points_per_hour: 1
-                  hours_to_show: 24
-                  show:
-                    fill: false
-                    icon: false
-                    name: false
-                    state: false
-                    legend: false
-                    points: false
-                    labels: false
-              min: |
-                [[[
-                  return `<ha-icon
-                    style="width: 12px; height: 12px; color: lightgray;">
-                    </ha-icon><span>${states['sensor.statistic_temperature_agathe'].attributes.min_value}°C</span>`
-                ]]]
-              max: |
-                [[[
-                  return `<ha-icon
-                    style="width: 12px; height: 12px; color: lightgray;">
-                    </ha-icon><span>${states['sensor.statistic_temperature_agathe'].attributes.max_value}°C</span>`
-                ]]]
-          - color_type: blank-card
-            styles:
-              card:
-                - width: 5px
-            type: custom:button-card
-      - type: entities
-        entities:
-          - cover.volet_chambre
+      - type: button
+        tap_action:
+          action: call-service
+          service: androidtv.adb_command
+          service_data:
+            command: SLEEP
+          target:
+            entity_id: media_player.shield_androidtv
+        entity: media_player.shield
+        show_state: true
+        icon: mdi:power
+      - type: iframe
+        url: >-
+          http://192.168.20.10:8123/api/hassio_ingress/<REDACTED>/test?orgId=1
+        aspect_ratio: 100%
